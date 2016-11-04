@@ -27,20 +27,20 @@ void test_thread(cyg_addrword_t arg)
 	/* Einmalige Aufgaben ... */
 
 	int y_0 = 125;
-	int f = 1;
-	float omega = 2 * M_PI * f;
+	int f = 100;
 	int offset = y_0;
-	int t = 0;
-	int  ms = 50;
+	int t = 0; // time
+	int d = 500; // delay 
+	// int ms = 20;
 
 	while(1)
 	{
 		/* Periodische Aufgaben ... */
-        	float y = y_0 * sinf((omega * t)/1000.) + offset;
+        	float y = y_0 * sinf((2*M_PI*f*t)) + offset;
         	ezs_dac_write((uint8_t) y);
         	// ezs_printf("Time: %f, Value: %f\n", t, y);
-        	ezs_delay_us(ms*1000);
-        	t += ms;
+        	ezs_delay_us(d*1000);
+        	t ++;
 	}
 
 }
