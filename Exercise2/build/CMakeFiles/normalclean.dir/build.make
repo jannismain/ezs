@@ -35,10 +35,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit
+CMAKE_SOURCE_DIR = /home/cip/2012/en48itit/ezs/Exercise2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build
+CMAKE_BINARY_DIR = /home/cip/2012/en48itit/ezs/Exercise2/build
 
 # Utility rule file for normalclean.
 
@@ -61,6 +61,6 @@ CMakeFiles/normalclean.dir/clean:
 .PHONY : CMakeFiles/normalclean.dir/clean
 
 CMakeFiles/normalclean.dir/depend:
-	cd /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/CMakeFiles/normalclean.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/cip/2012/en48itit/ezs/Exercise2/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cip/2012/en48itit/ezs/Exercise2 /home/cip/2012/en48itit/ezs/Exercise2 /home/cip/2012/en48itit/ezs/Exercise2/build /home/cip/2012/en48itit/ezs/Exercise2/build /home/cip/2012/en48itit/ezs/Exercise2/build/CMakeFiles/normalclean.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/normalclean.dir/depend
 

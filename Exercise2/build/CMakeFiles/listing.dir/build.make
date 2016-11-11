@@ -35,10 +35,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit
+CMAKE_SOURCE_DIR = /home/cip/2012/en48itit/ezs/Exercise2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build
+CMAKE_BINARY_DIR = /home/cip/2012/en48itit/ezs/Exercise2/build
 
 # Utility rule file for listing.
 
@@ -46,12 +46,12 @@ CMAKE_BINARY_DIR = /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build
 include CMakeFiles/listing.dir/progress.make
 
 CMakeFiles/listing:
-	echo -e "\n--- Symbols sorted by address ---\n" > /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/app.lst
-	arm-none-eabi-nm -S -C -n /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/app.elf >> /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/app.lst
-	echo -e "\n--- Symbols sorted by size ---\n" >> /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/app.lst
-	arm-none-eabi-nm -S -C -r --size-sort /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/app.elf >> /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/app.lst
-	echo -e "\n--- Full assembly listing ---\n" >> /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/app.lst
-	arm-none-eabi-objdump -S -x -d -C /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/app.elf >> /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/app.lst
+	echo -e "\n--- Symbols sorted by address ---\n" > /home/cip/2012/en48itit/ezs/Exercise2/build/app.lst
+	arm-none-eabi-nm -S -C -n /home/cip/2012/en48itit/ezs/Exercise2/build/app.elf >> /home/cip/2012/en48itit/ezs/Exercise2/build/app.lst
+	echo -e "\n--- Symbols sorted by size ---\n" >> /home/cip/2012/en48itit/ezs/Exercise2/build/app.lst
+	arm-none-eabi-nm -S -C -r --size-sort /home/cip/2012/en48itit/ezs/Exercise2/build/app.elf >> /home/cip/2012/en48itit/ezs/Exercise2/build/app.lst
+	echo -e "\n--- Full assembly listing ---\n" >> /home/cip/2012/en48itit/ezs/Exercise2/build/app.lst
+	arm-none-eabi-objdump -S -x -d -C /home/cip/2012/en48itit/ezs/Exercise2/build/app.elf >> /home/cip/2012/en48itit/ezs/Exercise2/build/app.lst
 
 listing: CMakeFiles/listing
 listing: CMakeFiles/listing.dir/build.make
@@ -66,6 +66,6 @@ CMakeFiles/listing.dir/clean:
 .PHONY : CMakeFiles/listing.dir/clean
 
 CMakeFiles/listing.dir/depend:
-	cd /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/CMakeFiles/listing.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/cip/2012/en48itit/ezs/Exercise2/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cip/2012/en48itit/ezs/Exercise2 /home/cip/2012/en48itit/ezs/Exercise2 /home/cip/2012/en48itit/ezs/Exercise2/build /home/cip/2012/en48itit/ezs/Exercise2/build /home/cip/2012/en48itit/ezs/Exercise2/build/CMakeFiles/listing.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/listing.dir/depend
 

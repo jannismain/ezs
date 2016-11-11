@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['math_20stuff',['Math stuff',['../group__math.html',1,'']]]
+  ['file',['file',['../structfile.html',1,'']]],
+  ['fileops',['fileops',['../structfile_1_1fileops.html',1,'file']]]
 ];

@@ -35,10 +35,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit
+CMAKE_SOURCE_DIR = /home/cip/2012/en48itit/ezs/Exercise2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build
+CMAKE_BINARY_DIR = /home/cip/2012/en48itit/ezs/Exercise2/build
 
 # Utility rule file for ecos.
 
@@ -46,12 +46,12 @@ CMAKE_BINARY_DIR = /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build
 include CMakeFiles/ecos.dir/progress.make
 
 CMakeFiles/ecos: ecos/makefile
-	make -C /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/ecos/
+	make -C /home/cip/2012/en48itit/ezs/Exercise2/build/ecos/
 
 ecos/makefile: ../ecos/ecos.ecc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/cip/2012/en48itit/ezs/Exercise2/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating ecos/makefile"
-	sh -c " cd /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/ecos; /proj/i4ezs/stm32/tools/ecosconfig --config=/home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/ecos/ecos.ecc tree || exit -1;"
+	sh -c " cd /home/cip/2012/en48itit/ezs/Exercise2/build/ecos; /proj/i4ezs/stm32/tools/ecosconfig --config=/home/cip/2012/en48itit/ezs/Exercise2/ecos/ecos.ecc tree || exit -1;"
 
 ecos: CMakeFiles/ecos
 ecos: ecos/makefile
@@ -67,6 +67,6 @@ CMakeFiles/ecos.dir/clean:
 .PHONY : CMakeFiles/ecos.dir/clean
 
 CMakeFiles/ecos.dir/depend:
-	cd /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/CMakeFiles/ecos.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/cip/2012/en48itit/ezs/Exercise2/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cip/2012/en48itit/ezs/Exercise2 /home/cip/2012/en48itit/ezs/Exercise2 /home/cip/2012/en48itit/ezs/Exercise2/build /home/cip/2012/en48itit/ezs/Exercise2/build /home/cip/2012/en48itit/ezs/Exercise2/build/CMakeFiles/ecos.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/ecos.dir/depend
 
