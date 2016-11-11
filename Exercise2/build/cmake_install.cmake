@@ -1,4 +1,4 @@
-# Install script for directory: /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit
+# Install script for directory: /home/cip/2012/en48itit/ezs/Exercise2
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -38,7 +38,7 @@ else()
   set(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 endif()
 
-file(WRITE "/home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/${CMAKE_INSTALL_MANIFEST}" "")
+file(WRITE "/home/cip/2012/en48itit/ezs/Exercise2/build/${CMAKE_INSTALL_MANIFEST}" "")
 foreach(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  file(APPEND "/home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  file(APPEND "/home/cip/2012/en48itit/ezs/Exercise2/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 endforeach()

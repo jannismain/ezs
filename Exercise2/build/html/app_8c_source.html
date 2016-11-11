@@ -96,18 +96,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;math.h&gt;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;ezs_counter.h&quot;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;ezs_delay.h&quot;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;ezs_gpio.h&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="ezs__counter_8h.html">ezs_counter.h</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="ezs__delay_8h.html">ezs_delay.h</a>&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="ezs__gpio_8h.html">ezs_gpio.h</a>&quot;</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="ezs__stopwatch_8h.html">ezs_stopwatch.h</a>&quot;</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;ezs_serial.h&quot;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;ezs_dac.h&quot;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;ezs_io.h&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="ezs__serial_8h.html">ezs_serial.h</a>&quot;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="ezs__dac_8h.html">ezs_dac.h</a>&quot;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="ezs__io_8h.html">ezs_io.h</a>&quot;</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#define STACKSIZE CYGNUM_HAL_STACK_SIZE_MINIMUM+10240</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define SERIAL_IRQ CYGNUM_HAL_INTERRUPT_UART2</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">static</span> cyg_interrupt serial_intr;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">static</span> <a class="code" href="structcyg__interrupt.html">cyg_interrupt</a> serial_intr;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">static</span> cyg_handle_t serial_isr_handle;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">static</span> <span class="keyword">volatile</span> uint8_t input;</div>
@@ -143,9 +143,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keywordtype">void</span> cyg_user_start(<span class="keywordtype">void</span>)</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;{</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="comment">// Setup counter</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        ezs_counter_init();</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        ezs_dac_init();</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        ezs_serial_init();</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <a class="code" href="ezs__counter_8h.html#a9065d0d8c3b2e2740d90fecd79ef1d39">ezs_counter_init</a>();</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <a class="code" href="ezs__dac_8h.html#aa43a41bfb3a74f68dbbfe43e61055b1e">ezs_dac_init</a>();</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <a class="code" href="ezs__serial_8h.html#abbd8af2cd8faac7168f7e7921b65024c">ezs_serial_init</a>();</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="comment">/* Create signal_generator_thread */</span></div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="comment">/* Implement */</span></div>
@@ -165,11 +165,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        cyg_interrupt_unmask(SERIAL_IRQ);</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;}</div>
+<div class="ttc" id="ezs__serial_8h_html_abbd8af2cd8faac7168f7e7921b65024c"><div class="ttname"><a href="ezs__serial_8h.html#abbd8af2cd8faac7168f7e7921b65024c">ezs_serial_init</a></div><div class="ttdeci">void ezs_serial_init(void)</div><div class="ttdoc">initializes the SERIAL interface. Call this function exactly once before using any other function pro...</div><div class="ttdef"><b>Definition:</b> <a href="ezs__serial_8cpp_source.html#l00037">ezs_serial.cpp:37</a></div></div>
+<div class="ttc" id="ezs__dac_8h_html"><div class="ttname"><a href="ezs__dac_8h.html">ezs_dac.h</a></div><div class="ttdoc">A very simple DA converter. Implemented for tricore and for fail*. </div></div>
+<div class="ttc" id="ezs__dac_8h_html_aa43a41bfb3a74f68dbbfe43e61055b1e"><div class="ttname"><a href="ezs__dac_8h.html#aa43a41bfb3a74f68dbbfe43e61055b1e">ezs_dac_init</a></div><div class="ttdeci">void ezs_dac_init(void)</div><div class="ttdoc">Initializes the DAC. This function has to be called exactly once so ezs_dac_write() exhibits defined ...</div><div class="ttdef"><b>Definition:</b> <a href="ezs__dac_8cpp_source.html#l00121">ezs_dac.cpp:121</a></div></div>
+<div class="ttc" id="ezs__gpio_8h_html"><div class="ttname"><a href="ezs__gpio_8h.html">ezs_gpio.h</a></div><div class="ttdoc">Access to General Purpose Input/Output pins. </div></div>
+<div class="ttc" id="ezs__counter_8h_html_a9065d0d8c3b2e2740d90fecd79ef1d39"><div class="ttname"><a href="ezs__counter_8h.html#a9065d0d8c3b2e2740d90fecd79ef1d39">ezs_counter_init</a></div><div class="ttdeci">void ezs_counter_init(void)</div><div class="ttdoc">This function has to be called exactly once so ezs_counter_get() yields meaningfull results...</div><div class="ttdef"><b>Definition:</b> <a href="ezs__counter_8c_source.html#l00112">ezs_counter.c:112</a></div></div>
+<div class="ttc" id="ezs__serial_8h_html"><div class="ttname"><a href="ezs__serial_8h.html">ezs_serial.h</a></div><div class="ttdoc">Functions for using the SERIAL interface. </div></div>
+<div class="ttc" id="structcyg__interrupt_html"><div class="ttname"><a href="structcyg__interrupt.html">cyg_interrupt</a></div><div class="ttdef"><b>Definition:</b> <a href="drv__api_8h_source.html#l00168">drv_api.h:168</a></div></div>
 <div class="ttc" id="ezs__stopwatch_8h_html"><div class="ttname"><a href="ezs__stopwatch_8h.html">ezs_stopwatch.h</a></div><div class="ttdoc">EZS time measurement and WCET generation. </div></div>
+<div class="ttc" id="ezs__delay_8h_html"><div class="ttname"><a href="ezs__delay_8h.html">ezs_delay.h</a></div><div class="ttdoc">EZS delay. </div></div>
+<div class="ttc" id="ezs__counter_8h_html"><div class="ttname"><a href="ezs__counter_8h.html">ezs_counter.h</a></div><div class="ttdoc">A simple counter interface. Implemented for tricore and for fail*. </div></div>
+<div class="ttc" id="ezs__io_8h_html"><div class="ttname"><a href="ezs__io_8h.html">ezs_io.h</a></div><div class="ttdoc">Input/Output primitives. </div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 11 2016 12:20:47 for Antwortzeit by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 11 2016 14:15:24 for Antwortzeit by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

@@ -35,10 +35,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit
+CMAKE_SOURCE_DIR = /home/cip/2012/en48itit/ezs/Exercise2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build
+CMAKE_BINARY_DIR = /home/cip/2012/en48itit/ezs/Exercise2/build
 
 # Utility rule file for edit.
 
@@ -46,20 +46,20 @@ CMAKE_BINARY_DIR = /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build
 include CMakeFiles/edit.dir/progress.make
 
 CMakeFiles/edit: ecos/install/lib/target.ld
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/cip/2012/en48itit/ezs/Exercise2/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Invoking codeblocks"
 	test -f Antwortzeit_ezs.cbp || grep -v CMake Antwortzeit.cbp > Antwortzeit_ezs.cbp
 	/usr/bin/codeblocks Antwortzeit_ezs.cbp
 
 ecos/install/lib/target.ld: ecos/makefile
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/CMakeFiles $(CMAKE_PROGRESS_2)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/cip/2012/en48itit/ezs/Exercise2/build/CMakeFiles $(CMAKE_PROGRESS_2)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating ecos/install/lib/target.ld"
-	sh -c "make -C /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/ecos || exit -1; if [ -e /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/ecos/install/lib/target.ld ] ; then touch /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/ecos/install/lib/target.ld; fi"
+	sh -c "make -C /home/cip/2012/en48itit/ezs/Exercise2/build/ecos || exit -1; if [ -e /home/cip/2012/en48itit/ezs/Exercise2/build/ecos/install/lib/target.ld ] ; then touch /home/cip/2012/en48itit/ezs/Exercise2/build/ecos/install/lib/target.ld; fi"
 
 ecos/makefile: ../ecos/ecos.ecc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/CMakeFiles $(CMAKE_PROGRESS_3)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/cip/2012/en48itit/ezs/Exercise2/build/CMakeFiles $(CMAKE_PROGRESS_3)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating ecos/makefile"
-	sh -c " cd /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/ecos; /proj/i4ezs/stm32/tools/ecosconfig --config=/home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/ecos/ecos.ecc tree || exit -1;"
+	sh -c " cd /home/cip/2012/en48itit/ezs/Exercise2/build/ecos; /proj/i4ezs/stm32/tools/ecosconfig --config=/home/cip/2012/en48itit/ezs/Exercise2/ecos/ecos.ecc tree || exit -1;"
 
 edit: CMakeFiles/edit
 edit: ecos/install/lib/target.ld
@@ -76,6 +76,6 @@ CMakeFiles/edit.dir/clean:
 .PHONY : CMakeFiles/edit.dir/clean
 
 CMakeFiles/edit.dir/depend:
-	cd /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build /home/cip/2012/ez66ireg/Documents/ezs/Antwortzeit/build/CMakeFiles/edit.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/cip/2012/en48itit/ezs/Exercise2/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cip/2012/en48itit/ezs/Exercise2 /home/cip/2012/en48itit/ezs/Exercise2 /home/cip/2012/en48itit/ezs/Exercise2/build /home/cip/2012/en48itit/ezs/Exercise2/build /home/cip/2012/en48itit/ezs/Exercise2/build/CMakeFiles/edit.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/edit.dir/depend
 
