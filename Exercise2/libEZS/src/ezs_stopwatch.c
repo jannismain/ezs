@@ -51,6 +51,7 @@ void ezs_lose_time(cyg_uint32 wceticks, cyg_uint8 percentage)
     while (counter > 0)
     {
         current_value = ezs_counter_get();
+        //ezs_dac_write((uint8_t)counter);
         diff = current_value - previous_value;
         if (diff > MAX_TICKS_PER_CYCLE) {
             counter -= MAX_TICKS_PER_CYCLE;
@@ -59,5 +60,6 @@ void ezs_lose_time(cyg_uint32 wceticks, cyg_uint8 percentage)
         }
         previous_value = current_value;
     }
+    //ezs_printf("%d\n", counter);
 }
 
