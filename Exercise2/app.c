@@ -79,22 +79,25 @@ void cyg_user_start(void)
 
     // test ezs_lose_time
     cyg_uint32 counter;
-    cyg_uint32 diff;
-    ezs_printf("Starting test...\n");
-    while(1) {
-	int j;
-        //ezs_printf("Starting iterations with j...\n");
-	for (j = 250; j < 1000; j += 1){
-        	ezs_watch_start(&counter);
-        	int i;
-		//ezs_printf("Starting iterations with i...\n");
-        	for (i = 0; i < 100; i++) {
-            	    ezs_lose_time(j, 0);
-		    //ezs_printf("I did lose time...\n");
-        	}
-        	diff = ezs_watch_stop(&counter);
-        	ezs_printf("expected: %d, actual: %d, diff: %d\n", j,diff/100,j-diff/100);
-	}
-	while(1){}
+    cyg_uint32 diff = 0;
+    int j;
+    
+    ezs_printf("measure overhead ezs_watch_*: "); 
+    for (j =0; j < 100; j++) {
+        ezs_watch_start(&counter);
+        diff += ezs_watch_stop(&counter);
     }
+    ezs_printf("Overhead = %u\n", diff/100);
+
+    ezs_printf("Starting test ezs_lose_time\n");
+    for (j = 250; j < 1000; j += 1) {
+        ezs_watch_start(&counter);
+        int i;
+        for (i = 0; i < 100; i++) {
+            ezs_lose_time(j, i);
+        }
+        diff = ezs_watch_stop(&counter);
+        //	ezs_printf("expected: %d, actual: %d, diff: %d\n", j,diff/100,j-diff/100);
+    }
+    while(1);
 }
