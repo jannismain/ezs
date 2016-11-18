@@ -18,8 +18,8 @@
 #include "ezs_io.h"
 
 #define STACKSIZE CYGNUM_HAL_STACK_SIZE_MINIMUM+1024
-#define PRIORITY_SIN 15
-#define PRIORITY_SERIAL_DSR 12
+#define PRIORITY_SIN 12
+#define PRIORITY_SERIAL_DSR 15
 #define SERIAL_IRQ CYGNUM_HAL_INTERRUPT_UART2
 static cyg_interrupt serial_intr;
 static cyg_handle_t serial_isr_handle;
@@ -55,7 +55,7 @@ static void serial_thread(cyg_addrword_t arg)
 {
 	ezs_serial_putc(input);
 	cyg_uint32 delay = ezs_watch_stop(&interrupt_time);
-	printf(" (Zeitmessung Interrupt - Ausgabe: %u ms)\n", (delay*ezs_counter_resolution_ps()/1000000));
+	printf(" (Antwortzeit serial_dsr: %u ms)\n", (delay*ezs_counter_resolution_ps()/1000000));
 }
 
 static void serial_dsr_handler(cyg_vector_t vector, cyg_ucount32 count,
@@ -72,7 +72,7 @@ static void signal_generator_thread(cyg_addrword_t arg)
 	uint32_t y_0 = 50;
 	uint32_t f1 = 2;
 	uint32_t f2 = 13;
-	uint32_t sampling_rate = 50; // in Hz, must be >2*max(f), where f=[f1, f2, .., fn]
+	uint32_t sampling_rate = 100; // in Hz, must be >2*max(f), where f=[f1, f2, .., fn]
 
 	// calculated values
     float omega1 = f1 * M_PI * 2;
