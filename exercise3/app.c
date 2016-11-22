@@ -18,7 +18,7 @@ static cyg_uint8 my_stack[STACKSIZE];
 static cyg_handle_t thread_handle;
 static cyg_thread threaddata;
 
-#define DATA_SIZE 128
+#define DATA_SIZE 512
 static uint32_t g_data[DATA_SIZE];
 
 void swap(uint32_t data[], size_t first, size_t second)
@@ -84,6 +84,9 @@ void heapsort_job(void)
 }
 
 void bubblesort(uint32_t array[], unsigned int N) {
+    cyg_uint32 time;
+    ezs_watch_start(&time);
+
 	int i, j;
 	for (i = 0; i < N - 1; ++i) {
 		for (j = 0; j < N - i - 1; ++j) {
@@ -93,10 +96,37 @@ void bubblesort(uint32_t array[], unsigned int N) {
 			}
 		}
 	}
+    ezs_watch_stop(&time);
+    ezs_printf(" %u \n", (time*ezs_counter_resolution_ps()/1000000));
 }
 
-void bubblesort_job(void) {
-	bubblesort(g_data, DATA_SIZE);
+void bubblesort_test(void) {
+	size_t i;
+    cyg_uint32 j;
+    cyg_uint32 k;
+
+    for (k = 64; k < 550; k*=2) {
+        ezs_printf("\nstart bubblesort with arraysize %u\n\n", k);
+        /* values already sorted */
+        for (i = 0; i < k; ++i)
+        {
+            g_data[i] = i;
+        }
+        ezs_printf("start bubblesort with sorted values, arraysize%d \n", k);
+        for (j = 0; j < 100; j++) {
+            bubblesort(g_data, k);
+        }
+        /* unsorted random values*/
+        for (i = 0; i < k; ++i)
+        {
+            g_data[i] = rand();
+        }
+        ezs_printf("start bubblesort with unsorted values, arraysize %d \n", k);
+        for (j = 0; j < 100; j++) {
+            bubblesort(g_data, k);
+        }
+        /* XXX more ??*/
+    }
 }
 
 uint32_t checksum(uint32_t array[], size_t N) {
@@ -112,7 +142,19 @@ uint32_t checksum(uint32_t array[], size_t N) {
 }
 
 uint32_t checksum_job(void) {
-	return checksum(g_data, DATA_SIZE);
+    /* array values should be unimportant */
+    cyg_uint32 i;
+    cyg_uint32 j;
+    cyg_uint32 time;
+    for (i = 64; i < 550; i*=2) {
+        ezs_printf("\nstart cecksum with arraysize %u\n\n", i);
+        for ( j = 0; j < 100; j++) {
+            ezs_watch_start(&time); 
+	        checksum(g_data, i);
+            ezs_watch_stop(&time);
+            ezs_printf(" %u \n", (time*ezs_counter_resolution_ps()/1000000));
+        }   
+    }
 }
 
 
@@ -129,8 +171,10 @@ void thread(cyg_addrword_t arg)
 		cyg_thread_delay(delay);	// Wait 5ms
 
 		// do things here...
+        checksum_job();
 		// heapsort_job();
-		// bubblesort_job();
+        // bubblesort_test();
+        while(1);
 	}
 }
 
@@ -159,12 +203,6 @@ void cyg_user_start(void)
 	// Setup counter
 	ezs_counter_init();
 	ezs_gpio_init();
-
-	size_t i;
-	for (i = 0; i < DATA_SIZE; ++i)
-	{
-		g_data[i] = i;
-	}
 
 	// Create test thread
 	cyg_thread_create(11, &thread, 0, "thread1", my_stack, STACKSIZE,
