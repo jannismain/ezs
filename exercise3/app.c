@@ -100,6 +100,10 @@ void bubblesort(uint32_t array[], unsigned int N) {
     ezs_printf(" %u \n", (time*ezs_counter_resolution_ps()/1000000));
 }
 
+void bubblesort_job(void) {
+    bubblesort(g_data, DATA_SIZE);
+}
+
 void bubblesort_test(void) {
 	size_t i;
     cyg_uint32 j;
@@ -114,7 +118,9 @@ void bubblesort_test(void) {
         }
         ezs_printf("start bubblesort with sorted values, arraysize%d \n", k);
         for (j = 0; j < 100; j++) {
+            cyg_interrupt_disable();
             bubblesort(g_data, k);
+            cyg_interrupt_enable();
         }
         /* unsorted random values*/
         for (i = 0; i < k; ++i)
@@ -123,9 +129,10 @@ void bubblesort_test(void) {
         }
         ezs_printf("start bubblesort with unsorted values, arraysize %d \n", k);
         for (j = 0; j < 100; j++) {
+            cyg_interrupt_disable();
             bubblesort(g_data, k);
+            cyg_interrupt_enable();
         }
-        /* XXX more ??*/
     }
 }
 
@@ -142,16 +149,23 @@ uint32_t checksum(uint32_t array[], size_t N) {
 }
 
 uint32_t checksum_job(void) {
+    return checksum(g_data, DATA_SIZE);
+}
+
+void checksum_test(void) {
     /* array values should be unimportant */
     cyg_uint32 i;
     cyg_uint32 j;
     cyg_uint32 time;
+    
     for (i = 64; i < 550; i*=2) {
         ezs_printf("\nstart cecksum with arraysize %u\n\n", i);
         for ( j = 0; j < 100; j++) {
+            cyg_interrupt_disable();
             ezs_watch_start(&time); 
 	        checksum(g_data, i);
             ezs_watch_stop(&time);
+            cyg_interrupt_enable();
             ezs_printf(" %u \n", (time*ezs_counter_resolution_ps()/1000000));
         }   
     }
@@ -171,7 +185,8 @@ void thread(cyg_addrword_t arg)
 		cyg_thread_delay(delay);	// Wait 5ms
 
 		// do things here...
-        checksum_job();
+        // cecksum_test();
+        bubblesort_test();
 		// heapsort_job();
         // bubblesort_test();
         while(1);
@@ -200,11 +215,19 @@ void sample_job(void)
 
 void cyg_user_start(void)
 {
-	// Setup counter
+	cyg_uint32 i;
+
+    // Setup counter
 	ezs_counter_init();
 	ezs_gpio_init();
 
-	// Create test thread
+    /* data for sort */
+    for (i = 0; i < DATA_SIZE; ++i)
+    {
+        g_data[i] = i;
+    }
+
+    // Create test thread
 	cyg_thread_create(11, &thread, 0, "thread1", my_stack, STACKSIZE,
 	                  &thread_handle, &threaddata);
 
