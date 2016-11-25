@@ -78,15 +78,11 @@ void heapsort(uint32_t arr[], unsigned int N)
 	}
 }
 
-void heapsort_job(void)
-{
+void heapsort_job(void) {
 	heapsort(g_data, DATA_SIZE);
 }
 
 void bubblesort(uint32_t array[], unsigned int N) {
-    cyg_uint32 time;
-    ezs_watch_start(&time);
-
 	int i, j;
 	for (i = 0; i < N - 1; ++i) {
 		for (j = 0; j < N - i - 1; ++j) {
@@ -96,8 +92,6 @@ void bubblesort(uint32_t array[], unsigned int N) {
 			}
 		}
 	}
-    ezs_watch_stop(&time);
-    ezs_printf(" %u \n", (time*ezs_counter_resolution_ps()/1000000));
 }
 
 void bubblesort_job(void) {
@@ -171,25 +165,29 @@ void checksum_test(void) {
     }
 }
 
+void bubblesort_oszi(void){
+    ezs_gpio_set(1);
+    bubblesort(g_data, 512);
+    ezs_gpio_set(0);
+    ezs_delay_us(10 * 1000);
+}
 
 // A little test thread.
-void thread(cyg_addrword_t arg)
-{
+void thread(cyg_addrword_t arg) {
 	cyg_resolution_t resolution = cyg_clock_get_resolution(cyg_real_time_clock());
 	const cyg_uint64 delay_ms = 5;
 	const cyg_uint64 delay_ns = delay_ms * 1000000;
 	const cyg_tick_count_t delay = (delay_ns * resolution.divisor)/resolution.dividend; //ticks
 
-	while (1)
-	{
+	while (1) {
 		cyg_thread_delay(delay);	// Wait 5ms
 
 		// do things here...
         // cecksum_test();
-        bubblesort_test();
+        // bubblesort_test();
 		// heapsort_job();
         // bubblesort_test();
-        while(1);
+        bubblesort_oszi();
 	}
 }
 
@@ -199,8 +197,7 @@ uint16_t g_sampled_values[SAMPLE_SIZE];
 extern uint16_t sample_adc(void);
 extern void initialize_adc(void);
 
-void sample_job(void)
-{
+void sample_job(void) {
 	static bool initialized = false;
 	static int position = 0;
 
@@ -213,8 +210,7 @@ void sample_job(void)
 	++position;
 }
 
-void cyg_user_start(void)
-{
+void cyg_user_start(void) {
 	cyg_uint32 i;
 
     // Setup counter
@@ -222,7 +218,7 @@ void cyg_user_start(void)
 	ezs_gpio_init();
 
     /* data for sort */
-    for (i = 0; i < DATA_SIZE; ++i)
+    for (i = 0; i < DATA_SIZE; i++) 
     {
         g_data[i] = i;
     }
