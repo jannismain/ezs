@@ -83,4 +83,27 @@ Teilaufgabe 19)
     Ansaetze:
         - anderes eCos verwenden
         - messungen
-        
+
+Teilaufgabe 20)
+    2 Warnings wegen fehlender maximalen Schleifendurchlaeufen
+    L1: outer Loop
+        laeuft bis return in else-Teil des else-Blocks am Anfang
+        Bedingung: second stage (extracting elements) erreicht und n == 0
+            - Durchlaeufe bis second stage: Bedingung dafuer: parent <= 0
+                - parent: initial N/2, wird in first stage um jew 1 dekrementiert
+                -> max N/2 Durchlaufe bevor second stage
+            - second stage: return bei n == 0
+                - n initial N, in jedem Durchlauf in second stage dekrementiert
+                -> max N Durchlaeufe von second stage bis Ende
+                   +1 fuer unvollstaendigen letzten Durchlauf
+        -> N/2 + N + 1 Durchlaeufe maximal
+    L2: inner Loop
+        laeuft bis (child >= n)
+        n maximal N
+        child = index * 2 + 1 = parent * 2 + 1 >= 0 * 2 + 1 >= 1
+        falls kein break: child = index * 2 + 1 = child * 2 + 1
+        Abschaetzung: max ld(N) Durchlaeufe, bei N > 3 weniger
+    Fuer N = 512:
+        - L1: N/2 + N + 1 = 767
+        - L2: ld(512) = 8
+    Ergebnis: 21.729ms
