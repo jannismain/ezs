@@ -12,20 +12,16 @@ Teilaufgabe 4)
 
 teilaufgabe 5)
     - 512 unsorted:
-        - mean: 2056
-        - standart deviation   1236.120307309 
-        - standart error 123.6120307309 
-        - Varianz  1527993.414141
-        - max  4271
-        - min 2   
+        - mean: 2166.97
+        - standart deviation   189.92729553216
+        - standart error 18,927 
+        - Varianz  35824.251
+        - max  2715
+        - min 1731   
     - 512 sorted:
-        - mean: 2125,39
-        - standart derivation   1211.323225846 
-        - standart error 121.1323225846
-        - Varianz  1467303,957475
-        - max  4174
-        - min 77   
-
+        2756 us
+    -512 checksum
+         523798 ps
 Teilaufgabe 6)
     - maximum < wcet -> wcet muss groesser als das maximum abgeschaetzt werden
     - minimum > bcet -> aber die ist eher irrelevant
