@@ -65,8 +65,12 @@ def create_heap(size):
 
 def fill_array(f, size):
 	array = create_heap(size)
+	f.write("{")
+
 	for i in array:
-		f.write("%d\n" % i)
+		f.write("%d, " % i)
+
+	f.write("}")
 
 
 if __name__ == "__main__":
