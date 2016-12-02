@@ -1,5 +1,5 @@
 <!DOCTYPE APX>
-<project xmlns="http://www.absint.com/apx" build="263491" version="16.04i" target="arm">
+<project xmlns="http://www.absint.com/apx" version="16.10" target="arm" build="269677">
  <options xmlns="http://www.absint.com/apx">
   <arm_options xmlns="http://www.absint.com/apx">
    <general xmlns="http://www.absint.com/apx">
@@ -10,7 +10,6 @@
   </arm_options>
   <analyses_options xmlns="http://www.absint.com/apx">
    <extract_annotations_from_source_files xmlns="http://www.absint.com/apx">true</extract_annotations_from_source_files>
-   <maximum_memory_usage xmlns="http://www.absint.com/apx">75</maximum_memory_usage>
    <use_only_safe_patterns xmlns="http://www.absint.com/apx">true</use_only_safe_patterns>
   </analyses_options>
   <visualization_options xmlns="http://www.absint.com/apx">
@@ -25,12 +24,15 @@
   <executables xmlns="http://www.absint.com/apx" hash="aaff004674bc345be51a95b9aeceb38c">build/app.elf</executables>
   <ais xmlns="http://www.absint.com/apx" hash="">app.ais</ais>
  </files>
- <analyses>
-  <analysis type="wcet_analysis" id="bubblesort_job" enabled="true">
-   <analysis_start>bubblesort_job</analysis_start>
+ <analyses xmlns="http://www.absint.com/apx">
+  <analysis xmlns="http://www.absint.com/apx" id="bubblesort_job" enabled="true" type="wcet_analysis">
+   <analysis_start xmlns="http://www.absint.com/apx">bubblesort_job</analysis_start>
   </analysis>
-  <analysis type="wcet_analysis" id="checksum_job" enabled="true">
-   <analysis_start>checksum_job</analysis_start>
+  <analysis xmlns="http://www.absint.com/apx" id="checksum_job" enabled="false" type="wcet_analysis">
+   <analysis_start xmlns="http://www.absint.com/apx">checksum_job</analysis_start>
+  </analysis>
+  <analysis id="bubblesort" enabled="true" type="wcet_analysis">
+   <analysis_start>bubblesort</analysis_start>
   </analysis>
  </analyses>
 </project>
