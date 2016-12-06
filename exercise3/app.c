@@ -1,4 +1,5 @@
 #include <cyg/hal/hal_arch.h>
+#include <cyg/hal/hal_arch.h>
 #include <cyg/kernel/kapi.h>
 #include <cyg/infra/diag.h>
 
@@ -106,30 +107,36 @@ void bubblesort_test(void) {
 	size_t i;
     cyg_uint32 j;
     cyg_uint32 k;
+    cyg_uint32 time;
+    cyg_uint32 result;
 
     for (k = 64; k < 550; k*=2) {
         ezs_printf("\nstart bubblesort with arraysize %u\n\n", k);
         /* values already sorted */
-        for (i = 0; i < k; ++i)
-        {
+        ezs_printf("start bubblesort with sorted values, arraysize%d \n", k);
+        for (i = 0; i < k; ++i) {
             g_data[i] = i;
         }
-        ezs_printf("start bubblesort with sorted values, arraysize%d \n", k);
         for (j = 0; j < 100; j++) {
             cyg_interrupt_disable();
+            ezs_watch_start(&time); 
             bubblesort(g_data, k);
+            result = ezs_watch_stop(&time); 
             cyg_interrupt_enable();
+            ezs_printf(" %u \n", (result*ezs_counter_resolution_ps()/1000000));
         }
         /* unsorted random values*/
-        for (i = 0; i < k; ++i)
-        {
-            g_data[i] = rand();
-        }
         ezs_printf("start bubblesort with unsorted values, arraysize %d \n", k);
         for (j = 0; j < 100; j++) {
+            for (i = 0; i < k; ++i) {
+                g_data[i] = rand();
+            }
             cyg_interrupt_disable();
+            ezs_watch_start(&time); 
             bubblesort(g_data, k);
+            result = ezs_watch_stop(&time); 
             cyg_interrupt_enable();
+            ezs_printf(" %u \n", (result*ezs_counter_resolution_ps()/1000000));
         }
     }
 }
@@ -155,16 +162,17 @@ void checksum_test(void) {
     cyg_uint32 i;
     cyg_uint32 j;
     cyg_uint32 time;
-    
+    cyg_uint32 result; 
+
     for (i = 64; i < 550; i*=2) {
-        ezs_printf("\nstart cecksum with arraysize %u\n\n", i);
+        ezs_printf("\nstart checksum with arraysize %u\n\n", i);
         for ( j = 0; j < 100; j++) {
             cyg_interrupt_disable();
             ezs_watch_start(&time); 
 	        checksum(g_data, i);
-            ezs_watch_stop(&time);
+            result = ezs_watch_stop(&time);
             cyg_interrupt_enable();
-            ezs_printf(" %u \n", (time*ezs_counter_resolution_ps()/1000000));
+            ezs_printf(" %u \n", (result*ezs_counter_resolution_ps()));
         }   
     }
 }
@@ -236,16 +244,17 @@ void thread(cyg_addrword_t arg) {
 	const cyg_uint64 delay_ns = delay_ms * 1000000;
 	const cyg_tick_count_t delay = (delay_ns * resolution.divisor)/resolution.dividend; //ticks
 
-    test_heapsort();
-
+    //test_heapsort();
+    checksum_test();
 	while (1) {
 //		cyg_thread_delay(delay);	// Wait 5ms
 
 		// do things here...
         // cecksum_test();
-        // bubblesort_test();
+        //bubblesort_test();
 		// heapsort_job();
         // bubblesort_test();
+//        bubblesort_oszi();
 //        bubblesort_oszi();
 	}
 }

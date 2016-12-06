@@ -21,3 +21,10 @@ ais2 {
         default unroll: 2;
     }
 }
+ais2 {
+    loop "bubblesort.L1" { bound: 0 .. 512; }
+}
+
+ais2 {
+    loop "bubblesort.L2" { bound: 0 .. 512; }
+}

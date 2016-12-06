@@ -10,6 +10,18 @@ Teilaufgabe 4)
     Messung misst in ms
     ist die Messung gueltig?
 
+teilaufgabe 5)
+    - 512 unsorted:
+        - mean: 2166.97
+        - standart deviation   189.92729553216
+        - standart error 18,927 
+        - Varianz  35824.251
+        - max  2715
+        - min 1731   
+    - 512 sorted:
+        2756 us
+    -512 checksum
+         523798 ps
 Teilaufgabe 6)
     - maximum < wcet -> wcet muss groesser als das maximum abgeschaetzt werden
     - minimum > bcet -> aber die ist eher irrelevant
