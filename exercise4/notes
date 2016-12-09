@@ -1,0 +1,8 @@
+Teilaufgabe 2+3)
+    - T2 und T3 haben die selbe periode und eine Prioritaet  die um 1 varierit
+    - die startintervalle zwischen den startzeitpunkten sind unkonstant
+    - wird unmittelbar nach beenden des vorherigen task ausgefuehrt
+
+Teilaufgabe 4)
+    - T4 wird nicht mehr unterbrochen
+    - idlethread hat anderes verhalten -> laueft zwischen T2 und T3 

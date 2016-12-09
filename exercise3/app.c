@@ -111,8 +111,7 @@ void bubblesort_test(void) {
     cyg_uint32 result;
 
     for (k = 64; k < 550; k*=2) {
-        ezs_printf("\nstart bubblesort with arraysize %u\n\n", k);
-        /* values already sorted */
+     /*   ezs_printf("\nstart bubblesort with arraysize %u\n\n", k);
         ezs_printf("start bubblesort with sorted values, arraysize%d \n", k);
         for (i = 0; i < k; ++i) {
             g_data[i] = i;
@@ -125,18 +124,24 @@ void bubblesort_test(void) {
             cyg_interrupt_enable();
             ezs_printf(" %u \n", (result*ezs_counter_resolution_ps()/1000000));
         }
-        /* unsorted random values*/
+       */ /* unsorted random values*/
         ezs_printf("start bubblesort with unsorted values, arraysize %d \n", k);
         for (j = 0; j < 100; j++) {
             for (i = 0; i < k; ++i) {
                 g_data[i] = rand();
             }
-            cyg_interrupt_disable();
+            //cyg_interrupt_disable();
+            ezs_gpio_set(true);
+            ezs_printf("start here\n");
+            ezs_delay_us(10 * 1000);
             ezs_watch_start(&time); 
-            bubblesort(g_data, k);
-            result = ezs_watch_stop(&time); 
-            cyg_interrupt_enable();
+            //bubblesort(g_data, 512);
+            bubblesort_job();
+            result = ezs_watch_stop(&time);
+            ezs_gpio_set(false);
+            //cyg_interrupt_enable();
             ezs_printf(" %u \n", (result*ezs_counter_resolution_ps()/1000000));
+            ezs_delay_us(10 * 10000);
         }
     }
 }
@@ -244,18 +249,17 @@ void thread(cyg_addrword_t arg) {
 	const cyg_uint64 delay_ns = delay_ms * 1000000;
 	const cyg_tick_count_t delay = (delay_ns * resolution.divisor)/resolution.dividend; //ticks
 
-    //test_heapsort();
-    checksum_test();
+    test_heapsort();
+    //checksum_test();
 	while (1) {
 //		cyg_thread_delay(delay);	// Wait 5ms
 
 		// do things here...
         // cecksum_test();
-        //bubblesort_test();
+    //    bubblesort_test();
 		// heapsort_job();
         // bubblesort_test();
-//        bubblesort_oszi();
-//        bubblesort_oszi();
+        //bubblesort_oszi();
 	}
 }
 

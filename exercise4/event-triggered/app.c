@@ -200,9 +200,9 @@ void cyg_user_start(void)
 
 	/* initialize alarms */
 	cyg_alarm_initialize(alarmhandle_1, cyg_current_time() + 1, ms_to_cyg_ticks(10));
-	cyg_alarm_initialize(alarmhandle_2, cyg_current_time() + 1, ms_to_cyg_ticks(20));
-	cyg_alarm_initialize(alarmhandle_3, cyg_current_time() + 1, ms_to_cyg_ticks(20));
-	cyg_alarm_initialize(alarmhandle_4, cyg_current_time() + 1, ms_to_cyg_ticks(100));
+	cyg_alarm_initialize(alarmhandle_2, cyg_current_time() + 4, ms_to_cyg_ticks(20));
+	cyg_alarm_initialize(alarmhandle_3, cyg_current_time() + 7, ms_to_cyg_ticks(20));
+	cyg_alarm_initialize(alarmhandle_4, cyg_current_time() + 14, ms_to_cyg_ticks(100));
 
 	/* enable alarms */
 	cyg_alarm_enable(alarmhandle_1);
