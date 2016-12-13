@@ -24,7 +24,7 @@ tt_ticktype ms_to_ezs_ticks(cyg_uint32 ms)
 }
 
 // Declare Dispatcher table
-tt_DispatcherTable(table1, 10);
+tt_DispatcherTable(table1, 80);
 
 // Declare task t1
 tt_Task(t1)
@@ -53,11 +53,11 @@ ttIdleTask
 	while(1);
 }
 
-
 externC void cyg_user_start()
 {
 	// Initialize counter
 	ezs_counter_init();
+
 	// Initialize tasks with stringent deadline checking
 	tt_InitTask(t1, TT_STRINGENT);
 	tt_InitTask(t2, TT_STRINGENT);
@@ -72,27 +72,40 @@ externC void cyg_user_start()
 	 * BEWARE! Neiter ms_to_ezs_ticks nor ms_to_cyg_ticks are working!
 	 * Fix them in order to complete this exercise
 	 */
+
 	// Insert entries:
-	valid &= tt_DispatcherTableEntry( table1, ms_to_cyg_ticks(1) , TT_START_TASK, t1 );
-	if (!valid) ezs_printf("1");
-	valid &= tt_DispatcherTableEntry( table1, ms_to_cyg_ticks(10) , TT_DEADLINE  , t1 );
-	if (!valid) ezs_printf("2");
+    uint32_t i; 
+    tt_ticktype start_time;
 
-	valid &= tt_DispatcherTableEntry( table1, ms_to_cyg_ticks(3) , TT_START_TASK, t2 );
-	if (!valid) ezs_printf("1");
-	valid &= tt_DispatcherTableEntry( table1, ms_to_cyg_ticks(22) , TT_DEADLINE  , t2 );
-	if (!valid) ezs_printf("2");
+    /* Task 1 */
+    start_time = 0;
+    for (i = 0; i < 10; i++) {
+        valid &= tt_DispatcherTableEntry( table1, ms_to_cyg_ticks(start_time), TT_DEADLINE, t1 );
+        valid &= tt_DispatcherTableEntry( table1, ms_to_cyg_ticks(start_time + 1), TT_START_TASK, t1 );
+        start_time += 10;
+    }
 
-	valid &= tt_DispatcherTableEntry( table1, ms_to_cyg_ticks(7), TT_START_TASK, t3 );
-	if (!valid) ezs_printf("1");
-	valid &= tt_DispatcherTableEntry( table1, ms_to_cyg_ticks(26) , TT_DEADLINE  , t3 );
-	if (!valid) ezs_printf("2");
-	
-	valid &= tt_DispatcherTableEntry( table1, ms_to_cyg_ticks(14) , TT_START_TASK, t4 );
-	if (!valid) ezs_printf("1");
-	valid &= tt_DispatcherTableEntry( table1, ms_to_cyg_ticks(113) , TT_DEADLINE  , t4 );
-	if (!valid) ezs_printf("2");
-    
+    /* Task 2 */
+    start_time = 3;
+    for (i = 0; i < 5; i++) {
+        valid &= tt_DispatcherTableEntry( table1, ms_to_cyg_ticks(start_time), TT_DEADLINE, t2 );
+        valid &= tt_DispatcherTableEntry( table1, ms_to_cyg_ticks(start_time + 1), TT_START_TASK, t2 );
+        start_time += 20;
+    }
+
+    /* Task 3 */
+    start_time = 6;
+    for (i = 0; i < 5; i++) {
+        valid &= tt_DispatcherTableEntry( table1, ms_to_cyg_ticks(start_time), TT_DEADLINE, t3 );
+        valid &= tt_DispatcherTableEntry( table1, ms_to_cyg_ticks(start_time + 1), TT_START_TASK, t3 );
+        start_time += 20;
+    }
+
+    /* Task 4 */
+    start_time = 13;
+    valid &= tt_DispatcherTableEntry( table1, ms_to_cyg_ticks(start_time), TT_DEADLINE, t4 );
+    valid &= tt_DispatcherTableEntry( table1, ms_to_cyg_ticks(start_time + 1), TT_START_TASK, t4 );
+
     if(!valid)
 	{
 		ezs_printf("WARNING: Table not valid!\n");
