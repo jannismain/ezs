@@ -32,6 +32,8 @@ set(LIBEZS_SOURCES
 	libEZS/src/ezs_stopwatch.c
 	libEZS/src/ezs_delay.c
 	libEZS/src/ezs_io_fel.c
+	libEZS/src/ezs_fft.c
+	libEZS/src/ezs_window.c
 	)
 
 ECOS_EZS_ADDLIB("${OPENCM3_PATH}/lib/libopencm3_stm32f4.a")
