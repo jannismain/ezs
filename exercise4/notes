@@ -6,3 +6,31 @@ Teilaufgabe 2+3)
 Teilaufgabe 4)
     - T4 wird nicht mehr unterbrochen
     - idlethread hat anderes verhalten -> laueft zwischen T2 und T3 
+
+Teilaufgabe 5)
+    - idletask hat angepasste prioritaet
+    - zeitdifferenz zwischen dem beenden des alten und starten des neuen tasks
+    - tasks unterbrechen sich nicht gegenseitig
+    - immer wenn kein anderes task laeuft, laeuft der mit hoechster prioritaet(T1)
+
+Teilaufgabe 6)
+    tt_Ecos:
+        + weniger boilerblade(?)
+        +- moeglichkeit deadlines zu ueberpruefen (bzw. halt zu muessen)
+        + validitaetspruefung der tabelle 
+        - ablaufplannung muss "per hand" gemacht werden. und korrekt sein   \
+
+Teilaufgabe 7)
+    - ecos 
+       - ist ereignisgesteurt
+       - ein thread je task mit angepasster prioriaet die sich hier aus RM ergibt
+       - online geschedult
+       - periodische ausfuehrung durch passendes resumen und suspenden eines threades und ein arlam je task
+    - tt_ecos
+        - zeitgesteuert
+        - ein task wird initialisiert und in dispatcher table eingetragen
+        - offline scheduling 
+        - palnung der gesammten hyperperiode --> periodische ausfuehrung der Tasks
+
+Teilaufgabe 8)
+    - ggf. nicht gesammte hyperpeiode plannen muessen, beim einplannen noch periodizitaet angegbar o.ae.
