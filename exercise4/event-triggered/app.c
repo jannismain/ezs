@@ -46,15 +46,25 @@ static cyg_handle_t alarmhandle_4;
 static cyg_handle_t counter;
 
 /* data */
+#define LDS_NUM	4
 #define LDS_INPUT_SIZE 64
-#define LDS_OUTPUT_SIZE 32
-#define ADC_DATA_SIZE (4 * LDS_INPUT_SIZE)
+#define LDS_OUTPUT_SIZE (LDS_INPUT_SIZE / 2)	// -1 ?????
+#define ADC_DATA_SIZE (2 * LDS_INPUT_SIZE)
 
 static volatile cyg_uint32 adc_wr = 0;
 static volatile cyg_uint32 adc_rd = 0;
 static volatile bool adc_data_full = false;
 static float adc_data[ADC_DATA_SIZE];
-static float lds_output[LDS_OUTPUT_SIZE];
+
+static cyg_uint32 lds_in_wr = 0;
+static float lds_input[LDS_INPUT_SIZE];
+
+static volatile cyg_uint32 lds_wr = 0;
+static volatile cyg_uint32 lds_rd = 0;
+static volatile bool lds_full;
+static float lds_output[LDS_INPUT_SIZE * LDS_NUM];
+
+
 
 // For Debugging
 static uint32_t test;
@@ -88,46 +98,7 @@ cyg_tick_count_t ms_to_ezs_ticks(cyg_uint32 ms)
 }
 volatile int x = CYG_FB_WIDTH(FRAMEBUF);
 
-// A little test thread.
-void thread(cyg_addrword_t arg)
-{
 
-	/**
-	 * Example for the usage of the framebuffer.
-	 * Comment out for simulating the SimpleScope!
-	 * Reuse for displaying the pds!
-	 **/
-	int i;
-	int xstart = 14*16 /* chars */ + 10 /* margin */;
-	int sizex  = ( CYG_FB_WIDTH(FRAMEBUF) - xstart ) / 4;
-	int sizey  = CYG_FB_HEIGHT(FRAMEBUF) /4;
-
-	for( i = 0; i < 16; i++)
-	{
-		int col = sizex * (i % 4);
-		int row = sizey * (i / 4);
-
-		ezs_fb_fill_block(xstart + col, row, sizex, sizey, i);
-
-	}
-	int size = 16;
-	for(i=0; i < 94; i++)
-	{
-		int row = size * (i % 14);
-		int col = size * (i / 14);
-
-		ezs_fb_print_char(i+'!', row+size, col+size,  CYG_FB_DEFAULT_PALETTE_BLUE);
-	}
-
-	ezs_fb_print_string("Hallo Welt!",60,150, CYG_FB_DEFAULT_PALETTE_RED);
-
-	while(1)
-	{
-		/* Use this rather than printf, for EZS FrameBuffer Simulator 3000 */
-		ezs_printf("Hallo!\n");
-		cyg_thread_suspend(cyg_thread_self());
-	}
-}
 
 void thread_1(cyg_addrword_t arg)
 {
@@ -152,7 +123,7 @@ void thread_2(cyg_addrword_t arg)
 
 		uint8_t x = ezs_adc_get();
         float value = ((float)x / 255) - 0.5;
-		//float value = (float)test_input();
+//		float value = (float)test_input();
 		adc_data[adc_wr] = value;
 		adc_wr = (adc_wr + 1) % ADC_DATA_SIZE;
 
@@ -169,55 +140,88 @@ void thread_3(cyg_addrword_t arg)
 		cyg_thread_suspend(threadhandle_3);
 
 		/* do work */
-		cyg_uint32 i = 0;
-		float lds_input[LDS_INPUT_SIZE];
-
-		cyg_uint32 curr = adc_rd;
-		for (i = 0; i < LDS_INPUT_SIZE; i++) {
+		while (lds_in_wr != LDS_INPUT_SIZE) {
 
 			/* if buffer is empty dont fetch new data */
-			if (curr == adc_wr && !adc_data_full)
-            {
-                ezs_printf("break at %u\n", curr);
+			if (adc_rd == adc_wr && !adc_data_full)
 				break;
-            }
 
-			lds_input[i] = adc_data[curr];
-			curr = (curr + 1) % ADC_DATA_SIZE;
+			lds_input[lds_in_wr++] = adc_data[adc_rd];
+			adc_rd = (adc_rd + 1) % ADC_DATA_SIZE;
 		}
 
-		if (i == LDS_INPUT_SIZE) { /* only process data if 64 values could be read (???) */
+		if (lds_in_wr == LDS_INPUT_SIZE) { /* only process data if 64 values could be read (???) */
+			lds_in_wr = 0;
 			adc_data_full = false;
 
 			// For Debugging
-			int err = 0;
+/*			int err = 0;
 			for (i = 0; i < LDS_INPUT_SIZE; i++) {
 				if (lds_input[i] != exp) {
-					ezs_printf("error at %u: exp %f, got %f\n", (adc_rd + i) % ADC_DATA_SIZE, exp, lds_input[i]);
+			//		ezs_printf("error at %u: exp %f, got %f\n", (adc_rd + i) % ADC_DATA_SIZE, exp, lds_input[i]);
 					err++;
 				}
 				exp = lds_input[i] + 1;
 			}
-			ezs_printf("err: %d\n", err);
+            if (err != 0)
+                ezs_printf("err: %d\n", err);
 
-			/* set new read index */
-			adc_rd = curr;
-			ezs_power_density_spectrum(lds_input, lds_output, LDS_INPUT_SIZE);
+            ezs_printf("........\n");
+			if (lds_input[0] != exp)
+				ezs_printf("err1\n");
+			if (lds_input[LDS_INPUT_SIZE - 1] != exp + LDS_INPUT_SIZE - 1)
+				ezs_printf("err2\n");
+			exp += LDS_INPUT_SIZE;
+*/
+			/* calculate output */
+			if (lds_full)		//?????
+				continue;
+			float *lds_out = &(lds_output[lds_wr * LDS_INPUT_SIZE]);
+			ezs_power_density_spectrum(lds_input, lds_out, LDS_INPUT_SIZE);
+			lds_wr = (lds_wr + 1) % LDS_NUM;
+			if (lds_rd == lds_wr)
+			{
+				//ezs_printf("full\n");
+				lds_full = true;
+			}
 		}
 	}
 }
 
+
+#define P_MIN (-140)
+#define P_MAX 0
+#define BLOCK_HEIGHT (CYG_FB_HEIGHT(FRAMEBUF) / (P_MAX - P_MIN))
+#define BLOCK_WIDTH (CYG_FB_WIDTH(FRAMEBUF) / 32)
+#define X_SIZE (BLOCK_WIDTH - (BLOCK_WIDTH / 8))
+#define Y_POS (CYG_FB_HEIGHT(FRAMEBUF) - 1)
+
 void thread_4(cyg_addrword_t arg)
 {
-	cyg_uint32 ms = 6;
-	cyg_uint32 ticks = ms_to_ezs_ticks(ms);
 	while(1) {
 		cyg_thread_suspend(threadhandle_4);
-		ezs_lose_time(ticks, 100);
+
+		if (lds_rd == lds_wr && !lds_full)	// buffer empty -> is this needed???
+			continue;
+
+		uint32_t i;
+		float *fb_input = &(lds_output[lds_rd * LDS_INPUT_SIZE]);
+
+		/* write to framebuffer */
+		ezs_fb_clear(0);
+		int x_pos = 0;
+	
+ 		for (i = 0; i < LDS_OUTPUT_SIZE; i++)
+		{
+			int y_size = 0 - (fb_input[i] - P_MIN) * BLOCK_HEIGHT;
+			ezs_fb_fill_block(x_pos, Y_POS, X_SIZE, y_size, 3);
+			x_pos += BLOCK_WIDTH;
+		}
+
+		lds_full = false;
+		lds_rd = (lds_rd + 1) % LDS_NUM;
 	}
 }
-
-
 
 
 void cyg_user_start(void)
@@ -250,10 +254,10 @@ void cyg_user_start(void)
 	cyg_alarm_create(counter, alarm_handler, (cyg_addrword_t) &threadhandle_4, &alarmhandle_4, &alarm_4);
 
 	/* initialize alarms */
-	cyg_alarm_initialize(alarmhandle_1, cyg_current_time() + 0, ms_to_cyg_ticks(16));
-	cyg_alarm_initialize(alarmhandle_2, cyg_current_time() + 0, ms_to_cyg_ticks(4));
-	cyg_alarm_initialize(alarmhandle_3, cyg_current_time() + 0, ms_to_cyg_ticks(256));
-	cyg_alarm_initialize(alarmhandle_4, cyg_current_time() + 0, ms_to_cyg_ticks(256));
+	cyg_alarm_initialize(alarmhandle_1, cyg_current_time() + 1, ms_to_cyg_ticks(16));//16));
+	cyg_alarm_initialize(alarmhandle_2, cyg_current_time() + 1, ms_to_cyg_ticks(4));//4));
+	cyg_alarm_initialize(alarmhandle_3, cyg_current_time() + 1, ms_to_cyg_ticks(256));//256));
+	cyg_alarm_initialize(alarmhandle_4, cyg_current_time() + 1, ms_to_cyg_ticks(256));//256));
 
 	/* enable alarms */
 	cyg_alarm_enable(alarmhandle_1);
