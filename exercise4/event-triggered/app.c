@@ -53,11 +53,11 @@ static cyg_handle_t counter;
 static volatile cyg_uint32 adc_wr = 0;
 static volatile cyg_uint32 adc_rd = 0;
 static volatile bool adc_data_full = false;
-static volatile float adc_data[ADC_DATA_SIZE];
-static volatile float lds_output[LDS_OUTPUT_SIZE];
+static float adc_data[ADC_DATA_SIZE];
+static float lds_output[LDS_OUTPUT_SIZE];
 
 // For Debugging
-static volatile uint32_t test;
+static uint32_t test;
 static uint32_t test_input() {
 	test++;
     return test;
@@ -150,9 +150,9 @@ void thread_2(cyg_addrword_t arg)
 		if (adc_data_full)	/* dont fetch new data if buffer is full -> is this needed??? */
 			continue;
 
-		//uint8_t x = ezs_adc_get();
-        //float value = ((float)x / 255) - 0.5;
-		float value = (float)test_input();
+		uint8_t x = ezs_adc_get();
+        float value = ((float)x / 255) - 0.5;
+		//float value = (float)test_input();
 		adc_data[adc_wr] = value;
 		adc_wr = (adc_wr + 1) % ADC_DATA_SIZE;
 
