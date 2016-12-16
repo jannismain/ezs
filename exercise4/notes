@@ -1,11 +1,19 @@
-Teilaufgabe 2+3)
+Teilaufgabe 2) Was beobachten Sie?
     - T2 und T3 haben die selbe periode und eine Prioritaet  die um 1 varierit
     - die startintervalle zwischen den startzeitpunkten sind unkonstant
     - wird unmittelbar nach beenden des vorherigen task ausgefuehrt
 
+Teilaufgabe 3) Welchen Effekt hätte dieses Systemverhalten auf die Abtastung von Signal 2?
+    - Die Abtastung wuerde in unregelmaessigen Abstaenden erfolgen, da die Laufzeit von T1 variiert.
+    - Eine derartige Abtastung ist nicht optimal
+
 Teilaufgabe 4)
-    - T4 wird nicht mehr unterbrochen
-    - idlethread hat anderes verhalten -> laueft zwischen T2 und T3 
+    - Vorgehen: Ablaufplan nach "cycling executive" Prinzip wurde entwickelt
+    - Noetiges Vorwissen: WCET + Periode der Tasks, Hyperperiode
+    - Beobachtungen: 
+        - T4 wird nicht mehr unterbrochen
+        - idlethread hat anderes verhalten -> laueft zwischen T2 und T3
+        - Tasks laufen nun zu periodisch (zu festgelegten Zeitpunkten) 
 
 Teilaufgabe 5)
     - idletask hat angepasste prioritaet
@@ -13,24 +21,44 @@ Teilaufgabe 5)
     - tasks unterbrechen sich nicht gegenseitig
     - immer wenn kein anderes task laeuft, laeuft der mit hoechster prioritaet(T1)
 
-Teilaufgabe 6)
+Teilaufgabe 6) Welche Vor- beziehungsweise Nachteile sehen sie gegenüber der ereignisgesteuerten
+Lösung?
     tt_Ecos:
-        + weniger boilerblade(?)
+        + weniger boilerblade(?) / boiler plate? Code, der relativ unspektakulaer ist und lediglich implementiert werden muss um eine gewissen Funktion zu erreichen?
         +- moeglichkeit deadlines zu ueberpruefen (bzw. halt zu muessen)
         + validitaetspruefung der tabelle 
-        - ablaufplannung muss "per hand" gemacht werden. und korrekt sein   \
+        - ablaufplannung muss "per hand" gemacht werden. und korrekt sein
 
-Teilaufgabe 7)
-    - ecos 
+Teilaufgabe 7) Welches Ausführungsmodell kommt in tt-eCos zum Einsatz? Welches in eCos? Welche Konsequenzen hat dies? Sprich: Wie müssen Sie Aktivitäten in eCos bzw. tt-eCos umsetzen?
+    - eCos 
        - ist ereignisgesteurt
        - ein thread je task mit angepasster prioriaet die sich hier aus RM ergibt
        - online geschedult
        - periodische ausfuehrung durch passendes resumen und suspenden eines threades und ein arlam je task
-    - tt_ecos
+    - tt_eCos
         - zeitgesteuert
         - ein task wird initialisiert und in dispatcher table eingetragen
         - offline scheduling 
-        - palnung der gesammten hyperperiode --> periodische ausfuehrung der Tasks
+        - planung der gesammten hyperperiode -> periodische ausfuehrung der Tasks
 
-Teilaufgabe 8)
-    - ggf. nicht gesammte hyperpeiode plannen muessen, beim einplannen noch periodizitaet angegbar o.ae.
+Teilaufgabe 8) Wie könnte man die ereignisgesteuerte Variante von eCos diesbezüglich benutzerfreundlicher gestalten?
+    - ggf. nicht gesammte hyperpeiode plannen muessen, beim einplannen noch periodizitaet angegbar o.ae. // glaube das trifft auf tt_ecos zu, jedoch nicht auf ecos
+    - Reduzierung des boiler plate codes (evtl. durch wegabstrahierte threaderstellung, implementierung von tasks in threads in form einer tabelle, wie tt_ecos)
+
+
+----- ERWEITERTE AUFGABEN -----
+
+Teilaufgabe 9) Sichern Sie zu diesem Zweck Ihre Implementierung aus den vorangegangenen Teilaufgaben für die spätere Abgabe.
+
+Teilaufgabe 10) Passen Sie die Prioritäten gemäß des RMA an und lassen sie die Aufgaben wieder zum Zeitpunkt cyg_current_time() + 0 starten.
+
+Teilaufgabe 11)
+
+Teilaufgabe 12)
+
+Teilaufgabe 13)Erstellen Sie mit Hilfe Ihrer Messungen einen neuen Ablaufplan und passen Sie den
+Phasenversatz entsprechend an.
+
+Teilaufgabe 14) Was würde hinsichtlich der Analyse und Planung passieren, wenn Sie z. B. 257 ms für die Ausgabe und 7 ms für die Abtastung wählen?
+
+Teilaufgabe 15) Wie sollten die Perioden von Aufgaben also in der Praxis ausgewählt werden?
