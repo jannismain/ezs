@@ -30,13 +30,15 @@ Lösung?
         - ablaufplannung muss "per hand" gemacht werden. und korrekt sein
         - gesamte Hyperperiode muss geplant werden.
 
-Teilaufgabe 7) Welches Ausführungsmodell kommt in tt-eCos zum Einsatz? Welches in eCos? Welche Konsequenzen hat dies? Sprich: Wie müssen Sie Aktivitäten in eCos bzw. tt-eCos umsetzen?
+Teilaufgabe 7) Welches Ausführungsmodell kommt in tt-eCos zum Einsatz? Welches in eCos? Welche Konsequenzen hat dies? Sprich: Wie müssen Sie Aktivitäten in eCos bzw. tt-eCos umsetzen? (Frage zielt auf Prozessorientierung vs. Auftragsorientierung ab!)
     - eCos 
+       - Prozessorientiertes Ausfuehrungsmodell
        - ist ereignisgesteurt
        - ein thread je task mit angepasster prioriaet die sich hier aus RM ergibt
        - online geschedult
        - periodische ausfuehrung durch passendes resumen und suspenden eines threades und ein arlam je task
     - tt_eCos
+        - Auftragsorientiertes Ausfuehrungsmodell
         - zeitgesteuert
         - ein task wird initialisiert und in dispatcher table eingetragen
         - offline scheduling 
