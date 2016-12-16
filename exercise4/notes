@@ -24,10 +24,11 @@ Teilaufgabe 5)
 Teilaufgabe 6) Welche Vor- beziehungsweise Nachteile sehen sie gegenüber der ereignisgesteuerten
 Lösung?
     tt_Ecos:
-        + weniger boilerblade(?) / boiler plate? Code, der relativ unspektakulaer ist und lediglich implementiert werden muss um eine gewissen Funktion zu erreichen?
+        + weniger boilerplate
         +- moeglichkeit deadlines zu ueberpruefen (bzw. halt zu muessen)
         + validitaetspruefung der tabelle 
         - ablaufplannung muss "per hand" gemacht werden. und korrekt sein
+        - gesamte Hyperperiode muss geplant werden.
 
 Teilaufgabe 7) Welches Ausführungsmodell kommt in tt-eCos zum Einsatz? Welches in eCos? Welche Konsequenzen hat dies? Sprich: Wie müssen Sie Aktivitäten in eCos bzw. tt-eCos umsetzen?
     - eCos 
@@ -43,7 +44,7 @@ Teilaufgabe 7) Welches Ausführungsmodell kommt in tt-eCos zum Einsatz? Welches 
 
 Teilaufgabe 8) Wie könnte man die ereignisgesteuerte Variante von eCos diesbezüglich benutzerfreundlicher gestalten?
     - ggf. nicht gesammte hyperpeiode plannen muessen, beim einplannen noch periodizitaet angegbar o.ae. // glaube das trifft auf tt_ecos zu, jedoch nicht auf ecos
-    - Reduzierung des boiler plate codes (evtl. durch wegabstrahierte threaderstellung, implementierung von tasks in threads in form einer tabelle, wie tt_ecos)
+    - Reduzierung des boilerplate codes (evtl. durch wegabstrahierte threaderstellung, implementierung von tasks in threads in form einer tabelle, wie tt_ecos)
 
 
 ----- ERWEITERTE AUFGABEN -----
@@ -56,7 +57,7 @@ Teilaufgabe 11)
 
 Teilaufgabe 12)
 
-Teilaufgabe 13)Erstellen Sie mit Hilfe Ihrer Messungen einen neuen Ablaufplan und passen Sie den
+Teilaufgabe 13) Erstellen Sie mit Hilfe Ihrer Messungen einen neuen Ablaufplan und passen Sie den
 Phasenversatz entsprechend an.
 
 Teilaufgabe 14) Was würde hinsichtlich der Analyse und Planung passieren, wenn Sie z. B. 257 ms für die Ausgabe und 7 ms für die Abtastung wählen?
