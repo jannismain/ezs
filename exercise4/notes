@@ -4,21 +4,28 @@ Teilaufgabe 2+3)
     - wird unmittelbar nach beenden des vorherigen task ausgefuehrt
 
 Teilaufgabe 4)
+    Vorgehen:
+        - anderen ablaufpaln erstellen
+        - durch andere startzeitpunkte der Task ueberschneidungen vermeiden
+    Noetiges wissen: 
+        - wcets, periode
+        - in welcher reihenfolge die tasks ausgefuehrt dh mit welcher prioritaet
+        - ergibt ablaufplan, denn kann man dann umordnen und zeiten anpassen
     - T4 wird nicht mehr unterbrochen
     - idlethread hat anderes verhalten -> laueft zwischen T2 und T3 
-
+    
 Teilaufgabe 5)
     - idletask hat angepasste prioritaet
     - zeitdifferenz zwischen dem beenden des alten und starten des neuen tasks
     - tasks unterbrechen sich nicht gegenseitig
-    - immer wenn kein anderes task laeuft, laeuft der mit hoechster prioritaet(T1)
+    - tasks laufen periodisch mit konstanten abstand
 
 Teilaufgabe 6)
     tt_Ecos:
         + weniger boilerblade(?)
         +- moeglichkeit deadlines zu ueberpruefen (bzw. halt zu muessen)
         + validitaetspruefung der tabelle
-        - ablaufplannung muss "per hand" gemacht werden. und korrekt sein   \
+        - ablaufplannung muss expizit gemacht werden. und korrekt sein 
 
 Teilaufgabe 7)
     - ecos
@@ -35,3 +42,11 @@ Teilaufgabe 7)
 Teilaufgabe 8)
     - ggf. nicht gesammte hyperpeiode plannen muessen, beim einplannen noch periodizitaet angegbar o.ae.
 
+Teilaufgabe 14)
+    das geht putt
+    da wcet > periode
+
+Teilaufgabe 15)
+    Es muss gelten:
+        Fuer alle Tasks n: periode_n > wcet_n  
+        hyperiode > wcet_1*(hyperperiode/periode_1) + wcet_2*(hyperperiode/periode_2)... + wcet_n*(hyperperiode/periode_n) 
