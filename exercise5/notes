@@ -1,0 +1,75 @@
+Teilaufgabe 1)
+    Welche Planbarkeitsanalysen kennen Sie?
+        - CPU-Auslastung:
+            Auslastung zu bestimmten Zeitpunkt: Zeitbedarf / Zeit
+            Planbarkeit haengt von max. Auslastung ab
+        - Zeitbedarfsanalyse
+            maximaler Zeitbedarf aller Tasks innerhalb von
+            Zeitintervall entscheidend fuer Zulaessigkeit
+        - Antwortzeitanalyse
+            zulaessig, wenn Antwortzeit kuerzer als der relative Termin
+        - Simulation
+            ungefaehr das, was mensch sich unter dem Begriff "Simulation" vorstellt
+
+     Wenden Sie ein geeignetes Verfahren auf das gegebene Aufgabensystem an. Ist es planbar?
+        - Zeitbedarfsanalyse:
+            Zeitintervall: Hyperperiode = 40
+            max. Zeitbedarf aller TAsks in 40 ms: 2*5 + 1*10 + 2*3 + 4*2 = 34 <= 40
+            ---> planbar
+
+Teilaufgabe 2)
+    Rahmenlaenge berechnen
+    Rahmenbedingungen:
+        - f >= max(e_i) fuer alle i
+            f >= 10
+        - H durch f teilbar
+            moegliche fs: 1, 2, 4, 5, 8, 10, 20
+            ---> f ist 10 oder 20
+        - f <= p_i fuer alle i:
+            ---> f = 10
+        - 2*f - ggT(p_i, f) <= d_i fuer alle i
+            2*f = 20
+                    ggT(p_i, f)     2*f - ggT(...)      d_i
+            i=1:    10              10                  20      -> OK
+            i=2:    10              10                  40      -> OK
+            i=3:    10              10                  20      -> OK
+            i=4:    10              10                  10      -> OK
+
+Teilaufgabe 3)
+    Welche fundamentale Eigenschaft herrscht innerhalb eines Rahmens
+        - keine Unterbrechungen
+        - Alle in einem Rahmen gestarteten Aufgaben enden innerhalb eines Rahmens
+        - Falls die WCET eines Tasks groesser ist als die Rahmengroesse,
+            muss der Task aufgeteilt werden -> nicht trivial
+
+
+Teilaufgabe 4) siehe Zettel
+
+Teilaufgabe 5)
+    Vorteile:
+        - wohlgeordneter Ablaufplan
+            begrenzte Rahmengroesse
+            Einlastung und Terminueberpruefung zu statisch bekannter Zeit
+        - Ablaufplanung offline
+        - niedriger Overhead
+            keine Verdraengung
+            minimales Laufzeitsystem
+        - Vorhersagbarkeit (Vorteil fuer WCET-Analzse)
+
+    Nachteile:
+        - busyloop innerhalb eines Rahmens
+        - nicht ueberall anwendbar,  Tasks muessen ggf gesplittet werden
+
+Teilaufgabe 6) siehe Zettel
+
+Teilaufgabe 7)
+    - periodische Zustellung:
+        - Einplanbarkeit
+        - flexible Prioritaet
+
+Teilaufgabe 8) siehe Zettel
+
+Teilaufgabe 9)
+    slack ist offline bekannt
+
+
