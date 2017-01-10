@@ -1,52 +1,50 @@
-Teilaufgabe 2+3)
+Teilaufgabe 2) Was beobachten Sie?
     - T2 und T3 haben die selbe periode und eine Prioritaet  die um 1 varierit
     - die startintervalle zwischen den startzeitpunkten sind unkonstant
     - wird unmittelbar nach beenden des vorherigen task ausgefuehrt
 
+Teilaufgabe 3) Welchen Effekt hätte dieses Systemverhalten auf die Abtastung von Signal 2?
+    - Die Abtastung wuerde in unregelmaessigen Abstaenden erfolgen, da die Laufzeit von T1 variiert.
+    - Eine derartige Abtastung ist nicht optimal
+
 Teilaufgabe 4)
-    Vorgehen:
-        - anderen ablaufpaln erstellen
-        - durch andere startzeitpunkte der Task ueberschneidungen vermeiden
-    Noetiges wissen: 
-        - wcets, periode
-        - in welcher reihenfolge die tasks ausgefuehrt dh mit welcher prioritaet
-        - ergibt ablaufplan, denn kann man dann umordnen und zeiten anpassen
-    - T4 wird nicht mehr unterbrochen
-    - idlethread hat anderes verhalten -> laueft zwischen T2 und T3 
-    
+    - Vorgehen: Ablaufplan nach "cycling executive" Prinzip wurde entwickelt
+    - Noetiges Vorwissen: WCET + Periode der Tasks, Hyperperiode
+    - Beobachtungen: 
+        - T4 wird nicht mehr unterbrochen
+        - idlethread hat anderes verhalten -> laueft zwischen T2 und T3
+        - Tasks laufen nun zu periodisch (zu festgelegten Zeitpunkten) 
+
 Teilaufgabe 5)
     - idletask hat angepasste prioritaet
     - zeitdifferenz zwischen dem beenden des alten und starten des neuen tasks
     - tasks unterbrechen sich nicht gegenseitig
-    - tasks laufen periodisch mit konstanten abstand
+    - immer wenn kein anderes task laeuft, laeuft der mit hoechster prioritaet(T1)
 
-Teilaufgabe 6)
+Teilaufgabe 6) Welche Vor- beziehungsweise Nachteile sehen sie gegenüber der ereignisgesteuerten
+Lösung?
     tt_Ecos:
-        + weniger boilerblade(?)
+        + weniger boilerplate
         +- moeglichkeit deadlines zu ueberpruefen (bzw. halt zu muessen)
-        + validitaetspruefung der tabelle
-        - ablaufplannung muss expizit gemacht werden. und korrekt sein 
+        + validitaetspruefung der tabelle 
+        - ablaufplannung muss "per hand" gemacht werden. und korrekt sein
+        - gesamte Hyperperiode muss geplant werden.
 
-Teilaufgabe 7)
-    - ecos
+Teilaufgabe 7) Welches Ausführungsmodell kommt in tt-eCos zum Einsatz? Welches in eCos? Welche Konsequenzen hat dies? Sprich: Wie müssen Sie Aktivitäten in eCos bzw. tt-eCos umsetzen? (Frage zielt auf Prozessorientierung vs. Auftragsorientierung ab!)
+    - eCos 
+       - Prozessorientiertes Ausfuehrungsmodell
        - ist ereignisgesteurt
        - ein thread je task mit angepasster prioriaet die sich hier aus RM ergibt
        - online geschedult
        - periodische ausfuehrung durch passendes resumen und suspenden eines threades und ein arlam je task
-    - tt_ecos
+
+    - tt_eCos
+        - Auftragsorientiertes Ausfuehrungsmodell
         - zeitgesteuert
         - ein task wird initialisiert und in dispatcher table eingetragen
-        - offline scheduling   
-        - palnung der gesammten hyperperiode --> periodische ausfuehrung der Tasks
+        - offline scheduling 
+        - planung der gesammten hyperperiode -> periodische ausfuehrung der Tasks
 
-Teilaufgabe 8)
-    - ggf. nicht gesammte hyperpeiode plannen muessen, beim einplannen noch periodizitaet angegbar o.ae.
-
-Teilaufgabe 14)
-    das geht putt
-    da wcet > periode
-
-Teilaufgabe 15)
-    Es muss gelten:
-        Fuer alle Tasks n: periode_n > wcet_n  
-        hyperiode > wcet_1*(hyperperiode/periode_1) + wcet_2*(hyperperiode/periode_2)... + wcet_n*(hyperperiode/periode_n) 
+Teilaufgabe 8) Wie könnte man die ereignisgesteuerte Variante von eCos diesbezüglich benutzerfreundlicher gestalten?
+    - ggf. nicht gesammte hyperpeiode plannen muessen, beim einplannen noch periodizitaet angegbar o.ae. // glaube das trifft auf tt_ecos zu, jedoch nicht auf ecos
+    - Reduzierung des boilerplate codes (evtl. durch wegabstrahierte threaderstellung, implementierung von tasks in threads in form einer tabelle, wie tt_ecos)
