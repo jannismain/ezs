@@ -41,7 +41,11 @@ cyg_tick_count_t ms_to_cyg_ticks(cyg_uint32 ms)
 {
 	cyg_handle_t clock = cyg_real_time_clock();
 	cyg_resolution_t res = cyg_clock_get_resolution(clock);
-	cyg_uint64 ticks = 1000000 * ms * (uint64_t)res.divisor / res.dividend;
+	cyg_uint64 ticks = 1000000 * ms * (uint64_t)res.divisor;
+    ezs_printf("ticks = %lu\n", ticks);
+    ticks /= res.dividend;
+    ezs_printf("res.dividend = %lu\n", res.dividend);
+    ezs_printf("ticks = %lu\n", ticks);
 	return (cyg_tick_count_t)ticks;
 }
 
@@ -107,6 +111,7 @@ void task_4()
 }
 
 void thread(cyg_addrword_t data) {
+    cyg_thread_suspend(threadhndl1);
     while(1) {
         if (acc_t4) {
             task_4();
@@ -144,8 +149,8 @@ void check_deadlines()
 void alarm_handler(cyg_handle_t alarm, cyg_addrword_t data) 
 {
     timer++;
-    //if (timer % 10 == 9)
-    //    check_deadlines();
+    if (timer % 10 == 9)
+        check_deadlines();
 
     if (timer % 10 == 0) acc_t4 = true;
     if (timer % 20 == 0) acc_t3 = true;
@@ -173,7 +178,7 @@ void cyg_user_start(void) {
 	                  &threadhndl1, &threaddata);
 
 	cyg_alarm_create(counter, alarm_handler, 0, &alarmhnd1, &alarm1);
-	cyg_alarm_initialize(alarmhnd1, cyg_current_time() + 1, ms_to_cyg_ticks(1));
+	cyg_alarm_initialize(alarmhnd1, cyg_current_time() + 1, 1);//ms_to_cyg_ticks(1));
     cyg_alarm_enable(alarmhnd1);
 }
 
