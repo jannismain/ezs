@@ -57,57 +57,57 @@ cyg_tick_count_t ms_to_ezs_ticks(cyg_uint32 ms)
 	return (cyg_tick_count_t)ticks;
 }
 
-void task_1()
+void task_1(void)
 {
-    ezs_dac_write(10);
+//    ezs_dac_write(10);
 	cyg_uint32 ms = 5;
 	cyg_uint32 ticks = ms_to_ezs_ticks(ms);
 	ezs_lose_time(ticks, 100);
-    ezs_dac_write(0);
+//    ezs_dac_write(0);
 }
 
-void task_2_a()
+void task_2_a(void)
 {
-    ezs_dac_write(20);
+ //   ezs_dac_write(20);
 	cyg_uint32 ms = 4;
 	cyg_uint32 ticks = ms_to_ezs_ticks(ms);
 	ezs_lose_time(ticks, 100);
-    ezs_dac_write(0);
+ //   ezs_dac_write(0);
 }
 
-void task_2_b()
+void task_2_b(void)
 {
-    ezs_dac_write(30);
+ //   ezs_dac_write(30);
 	cyg_uint32 ms = 2;
 	cyg_uint32 ticks = ms_to_ezs_ticks(ms);
 	ezs_lose_time(ticks, 100);
-    ezs_dac_write(0);
+ //   ezs_dac_write(0);
 }
 
-void task_2_c()
+void task_2_c(void)
 {
-    ezs_dac_write(40);
+//    ezs_dac_write(40);
 	cyg_uint32 ms = 4;
 	cyg_uint32 ticks = ms_to_ezs_ticks(ms);
 	ezs_lose_time(ticks, 100);
-    ezs_dac_write(0);
+//    ezs_dac_write(0);
 }
 
-void task_3()
+void task_3(void)
 {
-    ezs_dac_write(50);
+//    ezs_dac_write(50);
 	cyg_uint32 ms = 3;
 	cyg_uint32 ticks = ms_to_ezs_ticks(ms);
 	ezs_lose_time(ticks, 100);
-    ezs_dac_write(0);
+//    ezs_dac_write(0);
 }
-void task_4()
+void task_4(void)
 {
-    ezs_dac_write(60);
+//    ezs_dac_write(60);
 	cyg_uint32 ms = 2;
 	cyg_uint32 ticks = ms_to_ezs_ticks(ms);
 	ezs_lose_time(ticks, 100);
-    ezs_dac_write(0);
+//    ezs_dac_write(0);
 }
 
 void thread(cyg_addrword_t data) {
@@ -136,7 +136,7 @@ void thread(cyg_addrword_t data) {
     }
 }
 
-void check_deadlines()
+void check_deadlines(void)
 {
     if (acc_t1) ezs_printf("Task 1 exceeded deadline\n");
     if (acc_t2_a) ezs_printf("Task 2_a exceeded deadline\n");
@@ -149,18 +149,17 @@ void check_deadlines()
 void alarm_handler(cyg_handle_t alarm, cyg_addrword_t data) 
 {
     timer++;
-    if (timer % 10 == 9)
+    if (timer % 10 == 0) // evtl timer % 9 ???
         check_deadlines();
 
     if (timer % 10 == 0) acc_t4 = true;
     if (timer % 20 == 0) acc_t3 = true;
-    if (timer % 20 == 0) acc_t1 = true;
-    if (timer % 40 == 0) {
-        acc_t2_a = true;
-        acc_t2_b = true;
-        acc_t2_c = true;
-        timer = 0;
-    }
+    if (timer % 20 == 10) acc_t1 = true;
+    if (timer % 40 == 0) acc_t2_a = true;
+    if (timer % 40 == 10) acc_t2_b = true;
+    if (timer % 40 == 20) acc_t2_c = true;
+
+    timer %= 40;
     cyg_thread_resume(threadhndl1);
 }
 
