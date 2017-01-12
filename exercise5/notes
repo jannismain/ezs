@@ -3,6 +3,7 @@ Teilaufgabe 1)
         - CPU-Auslastung:
             Auslastung zu bestimmten Zeitpunkt: Zeitbedarf / Zeit
             Planbarkeit haengt von max. Auslastung ab
+            Auslastung darf nicht groeser 1 sein
         - Zeitbedarfsanalyse
             maximaler Zeitbedarf aller Tasks innerhalb von
             Zeitintervall entscheidend fuer Zulaessigkeit
@@ -19,15 +20,22 @@ Teilaufgabe 1)
 
 Teilaufgabe 2)
     Rahmenlaenge berechnen
+
+    f = Rahmenlaenge 
+    e_i = WCET des Tasks i
+    H = Hyperperiode
+    p_i = Periode des Tasks i
+    d_i = Deadline Task i
+
     Rahmenbedingungen:
-        - f >= max(e_i) fuer alle i
+        - f >= max(e_i) fuer alle i             //Jeder Task soll sich innerhalb von einen Rahmen ausfuehren lassen
             f >= 10
-        - H durch f teilbar
+        - H durch f teilbar                     //zyklische Ausfuerung so mgl
             moegliche fs: 1, 2, 4, 5, 8, 10, 20
             ---> f ist 10 oder 20
-        - f <= p_i fuer alle i:
+        - f <= p_i fuer alle i:                 //Deadlineueberpruefung am ende jedes Rahmens fuer alle Tasks, Task darf dafuer nur einmal ausgefueht werden
             ---> f = 10
-        - 2*f - ggT(p_i, f) <= d_i fuer alle i
+        - 2*f - ggT(p_i, f) <= d_i fuer alle i  //Nachfragen
             2*f = 20
                     ggT(p_i, f)     2*f - ggT(...)      d_i
             i=1:    10              10                  20      -> OK
@@ -41,6 +49,7 @@ Teilaufgabe 3)
         - Alle in einem Rahmen gestarteten Aufgaben enden innerhalb eines Rahmens
         - Falls die WCET eines Tasks groesser ist als die Rahmengroesse,
             muss der Task aufgeteilt werden -> nicht trivial
+        - sollten aperiodische Aufgaben in das Rahmensystem intergriert werden muessen vom Anwendungsentwickler muessen den Anfoerderungen entsprechende Massnahmen ergriffen werden. 
 
 
 Teilaufgabe 4) siehe Zettel
@@ -54,21 +63,42 @@ Teilaufgabe 5)
         - niedriger Overhead
             keine Verdraengung
             minimales Laufzeitsystem
-        - Vorhersagbarkeit (Vorteil fuer WCET-Analzse)
+        - Vorhersagbarkeit (Vorteil fuer WCET-Analyse)
 
     Nachteile:
-        - busyloop innerhalb eines Rahmens
-        - nicht ueberall anwendbar,  Tasks muessen ggf gesplittet werden
-
+        - nicht ueberall anwendbar, Tasks muessen ggf gesplittet werden
+        - wenn Task alle auf ready gesetz werden, wird keine genaue Periodische Ausfuehrung garantiert, bei Unterschreiten von WCETS kann es zu jitter kommen 
 Teilaufgabe 6) siehe Zettel
+    WC: 40/4 * 1,5 ms = 12 ms gehen fuer aperiodiossche Aufagbe drauf
+    - soviel Zeit ist nicht vorhanden
+    - Unterbrecher:
+        - WC 1,5 ms Antwortzeit ==> pro frame 3ms
+        => in den ersten drei frames ueberschreitet die jeweils letzte Aufgabe die Deadline 
+    - Hintergrund:
+        - WC Plan 2: Antwortzeit von erster aperiodischer aufgabe ist 36,5 ms
+        - Sollten mehr als 4 aperiodische Aufgaben pro Hyperperiode auftretten, so werden sie undefiniert lange verzoegert
+        - periodische Aufgaben werden wie gewohnt ausgefuehrt
+    - Slackstealing:
+        - WC Antwortzeit 30.5 ms
+        - periodische Tasks unbeeintraechtigt(zumindest ihre deadlines)
 
 Teilaufgabe 7)
-    - periodische Zustellung:
-        - Einplanbarkeit
-        - flexible Prioritaet
+    Slackstealing:
+        - andere Aufgaben ueberschreiten ihre Deadline nicht
+        - im Average Case kann man ggf. vlt. evtl. davon ausgehen das der aperiodische Task nicht alzu haeufig ausgefuehrt wird
+    Slackstealing ist von strategien am aufwendigsten zu implementieren
 
 Teilaufgabe 8) siehe Zettel
 
 Teilaufgabe 9)
     slack ist offline bekannt
-
+    
+Teilaufgabe 13)
+    Slackstealing:
+        - periodischer Zusteller mit hoechster Prioritaet laeuft am Anfang des Rahmens
+        - Deadline Ueberpruefung nach berechnerter Schlupfzeit, die denn thread ggf. unterbricht
+    Hintergrundbetrieb:
+        - aperiodische Auftraege werden von einen periodischen Zusteller erledigt.
+        - Dieser ist in einem Thread mit niedrigster Prioritaet realisiert, er laeuft in berechneten Zeitfenstern nicht benoetigter Zeit. 
+    Unterbrecherbetrieb:
+        - periodischer Zusteller laeuft mit hoechster Priorirtaet der gleich am Anfang geschedult wird.
