@@ -42,10 +42,7 @@ cyg_tick_count_t ms_to_cyg_ticks(cyg_uint32 ms)
 	cyg_handle_t clock = cyg_real_time_clock();
 	cyg_resolution_t res = cyg_clock_get_resolution(clock);
 	cyg_uint64 ticks = 1000000 * ms * (uint64_t)res.divisor;
-    ezs_printf("ticks = %lu\n", ticks);
     ticks /= res.dividend;
-    ezs_printf("res.dividend = %lu\n", res.dividend);
-    ezs_printf("ticks = %lu\n", ticks);
 	return (cyg_tick_count_t)ticks;
 }
 
@@ -59,55 +56,43 @@ cyg_tick_count_t ms_to_ezs_ticks(cyg_uint32 ms)
 
 void task_1(void)
 {
-//    ezs_dac_write(10);
 	cyg_uint32 ms = 5;
 	cyg_uint32 ticks = ms_to_ezs_ticks(ms);
 	ezs_lose_time(ticks, 100);
-//    ezs_dac_write(0);
 }
 
 void task_2_a(void)
 {
- //   ezs_dac_write(20);
 	cyg_uint32 ms = 4;
 	cyg_uint32 ticks = ms_to_ezs_ticks(ms);
 	ezs_lose_time(ticks, 100);
- //   ezs_dac_write(0);
 }
 
 void task_2_b(void)
 {
- //   ezs_dac_write(30);
 	cyg_uint32 ms = 2;
 	cyg_uint32 ticks = ms_to_ezs_ticks(ms);
 	ezs_lose_time(ticks, 100);
- //   ezs_dac_write(0);
 }
 
 void task_2_c(void)
 {
-//    ezs_dac_write(40);
 	cyg_uint32 ms = 4;
 	cyg_uint32 ticks = ms_to_ezs_ticks(ms);
 	ezs_lose_time(ticks, 100);
-//    ezs_dac_write(0);
 }
 
 void task_3(void)
 {
-//    ezs_dac_write(50);
 	cyg_uint32 ms = 3;
 	cyg_uint32 ticks = ms_to_ezs_ticks(ms);
 	ezs_lose_time(ticks, 100);
-//    ezs_dac_write(0);
 }
 void task_4(void)
 {
-//    ezs_dac_write(60);
 	cyg_uint32 ms = 2;
 	cyg_uint32 ticks = ms_to_ezs_ticks(ms);
 	ezs_lose_time(ticks, 100);
-//    ezs_dac_write(0);
 }
 
 void thread(cyg_addrword_t data) {
@@ -148,18 +133,29 @@ void check_deadlines(void)
 
 void alarm_handler(cyg_handle_t alarm, cyg_addrword_t data) 
 {
-    timer++;
-    if (timer % 10 == 0) // evtl timer % 9 ???
+    if (timer % 40 == 0) {
         check_deadlines();
+        acc_t4 = true;
+        acc_t3 = true;
+        acc_t2_a = true;
+        timer = 0;
+    } else if (timer % 40 == 10) {
+        check_deadlines();
+        acc_t4 = true;
+        acc_t1 = true;
+        acc_t2_b = true;
+    } else if (timer % 40 == 20) {
+        check_deadlines();
+        acc_t4 = true;
+        acc_t3 = true;
+        acc_t2_c = true;
+    } else if (timer % 40 == 30) {
+        check_deadlines();
+        acc_t4 = true;
+        acc_t1 = true;
+    }
 
-    if (timer % 10 == 0) acc_t4 = true;
-    if (timer % 20 == 0) acc_t3 = true;
-    if (timer % 20 == 10) acc_t1 = true;
-    if (timer % 40 == 0) acc_t2_a = true;
-    if (timer % 40 == 10) acc_t2_b = true;
-    if (timer % 40 == 20) acc_t2_c = true;
-
-    timer %= 40;
+    timer++;
     cyg_thread_resume(threadhndl1);
 }
 
