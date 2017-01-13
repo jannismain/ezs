@@ -54,7 +54,7 @@ Teilaufgabe 3)
 
 Teilaufgabe 4) siehe Zettel
 
-Teilaufgabe 5)
+Teilaufgabe 5) Was sind die wesentlichen Vor- und Nachteile des zyklischen Ablaufmodells?
     Vorteile:
         - wohlgeordneter Ablaufplan
             begrenzte Rahmengroesse
@@ -68,7 +68,15 @@ Teilaufgabe 5)
     Nachteile:
         - nicht ueberall anwendbar, Tasks muessen ggf gesplittet werden
         - wenn Task alle auf ready gesetz werden, wird keine genaue Periodische Ausfuehrung garantiert, bei Unterschreiten von WCETS kann es zu jitter kommen 
-Teilaufgabe 6) siehe Zettel
+
+Teilaufgabe 6) Identifizieren Sie die kritischen Punkte in ihrem Ablaufplan (z. B. volle Rahmen, nahe
+Deadline, ... ) und fügen Sie die Aufgabe T5 an diesen Stellen exemplarisch in den
+Ablaufplan ein. Variieren Sie die Art der Behandlung und schätzen Sie die Antwortzeit
+für T5 und die periodischen Aufgaben T1 − T4 ab
+
+    kritische Punkte -> Zettel
+
+    Abschaetzung:
     WC: 40/4 * 1,5 ms = 12 ms gehen fuer aperiodiossche Aufagbe drauf
     - soviel Zeit ist nicht vorhanden
     - Unterbrecher:
@@ -82,7 +90,7 @@ Teilaufgabe 6) siehe Zettel
         - WC Antwortzeit 30.5 ms
         - periodische Tasks unbeeintraechtigt(zumindest ihre deadlines)
 
-Teilaufgabe 7)
+Teilaufgabe 7) wie lassen sich aperiodische aufgaben sinnvoll in einen zyklischen Ablaufplan integrieren
     Slackstealing:
         - andere Aufgaben ueberschreiten ihre Deadline nicht
         - im Average Case kann man ggf. vlt. evtl. davon ausgehen das der aperiodische Task nicht alzu haeufig ausgefuehrt wird
@@ -90,10 +98,11 @@ Teilaufgabe 7)
 
 Teilaufgabe 8) siehe Zettel
 
-Teilaufgabe 9)
+Teilaufgabe 9) Wieso eignen sich Ablaufpläne besonders gut für Slack-Stealing?
     slack ist offline bekannt
     
-Teilaufgabe 13)
+Teilaufgabe 13) Wie würden Sie die nichtperiodische Aufgabe T5 in Ihrer Cyclic Executive bei Unterbrecherbetrieb,
+Hintergrundbetrieb bzw. Slack Stealing jeweils umsetzen?
     Slackstealing:
         - periodischer Zusteller mit hoechster Prioritaet laeuft am Anfang des Rahmens
         - Deadline Ueberpruefung nach berechnerter Schlupfzeit, die denn thread ggf. unterbricht
