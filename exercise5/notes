@@ -18,7 +18,8 @@ Teilaufgabe 1)
             max. Zeitbedarf aller TAsks in 40 ms: 2*5 + 1*10 + 2*3 + 4*2 = 34 <= 40
             ---> planbar
 
-Teilaufgabe 2)
+Teilaufgabe 2) Erstellen Sie unter Verwendung der in der Vorlesung vorgestellten Strukturelemente einen zyklischen Ablaufplan.
+
     Rahmenlaenge berechnen
 
     f = Rahmenlaenge 
@@ -48,8 +49,8 @@ Teilaufgabe 3)
         - keine Unterbrechungen
         - Alle in einem Rahmen gestarteten Aufgaben enden innerhalb eines Rahmens
         - Falls die WCET eines Tasks groesser ist als die Rahmengroesse,
-            muss der Task aufgeteilt werden -> nicht trivial
-        - sollten aperiodische Aufgaben in das Rahmensystem intergriert werden muessen vom Anwendungsentwickler muessen den Anfoerderungen entsprechende Massnahmen ergriffen werden. 
+            muss der Task aufgeteilt werden -> nicht trivial, Verwaltungsgemeinkosten steigen
+        - sollten aperiodische Aufgaben in das Rahmensystem intergriert werden muessen vom Anwendungsentwickler den Anfoerderungen entsprechende Massnahmen ergriffen werden. 
 
 
 Teilaufgabe 4) siehe Zettel
@@ -105,7 +106,7 @@ Teilaufgabe 13) Wie würden Sie die nichtperiodische Aufgabe T5 in Ihrer Cyclic 
 Hintergrundbetrieb bzw. Slack Stealing jeweils umsetzen?
     Slackstealing:
         - periodischer Zusteller mit hoechster Prioritaet laeuft am Anfang des Rahmens
-        - Deadline Ueberpruefung nach berechnerter Schlupfzeit, die denn thread ggf. unterbricht
+        - Deadline Ueberpruefung nach berechneter Schlupfzeit, die denn thread ggf. unterbricht
     Hintergrundbetrieb:
         - aperiodische Auftraege werden von einen periodischen Zusteller erledigt.
         - Dieser ist in einem Thread mit niedrigster Prioritaet realisiert, er laeuft in berechneten Zeitfenstern nicht benoetigter Zeit. 
