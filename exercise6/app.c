@@ -27,6 +27,7 @@
 #define DISPLAY_SIGNAL_TASK_PRIORITY 12
 #define DISPLAY_PDS_TASK_PRIORITY 14
 #define ANALYSIS_TASK_PRIORITY 13
+
 #define DECODING_TASK_PRIORITY 0
 #define POLLING_TASK_PRIORITY 0
 #define STATEMACHINE_TASK_PRIORITY 0
@@ -38,13 +39,13 @@
 #define ANALYSIS_TASK_PERIOD 1000
 #define POLLING_TASK_PERIOD 0
 
-#define PROCRASTINATION_WCET 0
+#define PROCRASTINATION_WCET 1
 
 #define SAMPLING_TASK_PHASE 0
-#define PROCRASTINATION_TASK_PHASE 0
+#define PROCRASTINATION_TASK_PHASE 1
 #define ANALYSIS_TASK_PHASE 0
 #define DISPLAY_SIGNAL_TASK_PHASE 0
-#define DISPLAY_PDS_TASK_PHASE 500
+#define DISPLAY_PDS_TASK_PHASE 140
 #define POLLING_TASK_PHASE 0
 
 #define STACKSIZE    (CYGNUM_HAL_STACK_SIZE_MINIMUM+4096)
@@ -77,12 +78,11 @@ static enum CommandStatus packet_receive(char c)
     if (c == '\n') {
         s_serial_buffer[s_serial_position] = '\0';
         s_serial_position = 0;
-        c_empty = true;
+        s_command_decodable = true;
         return CommandComplete;
     }
 
     s_serial_buffer[s_serial_position++] = c;
-    c_empty = true;
     return CommandIncomplete;
 }
 
@@ -119,19 +119,37 @@ static cyg_tick_count_t ms_to_ezs_ticks(cyg_uint32 ms) {
 	return (cyg_tick_count_t)ticks;
 }
 
+static cyg_uint64 ezs_ticks_to_ms(cyg_uint32 ticks) {
+	cyg_resolution_t res = ezs_counter_get_resolution();
+    cyg_uint64 ms = ticks;
+    ms *= res.dividend;
+    ms /= res.divisor;
+    ms /= 1000000;
+    return ms;
+}
+
 enum Command decode_command(void)
 {
-//    if (!strncmp(s_serial_buffer, "display ", 8));
-
 	enum Command ret = Invalid;
+    if (!s_command_decodable)
+        return ret;
+    if (!strncmp(s_serial_buffer, "display signal", 15)) {
+        ret = DisplayTime;
+    } else if (!strncmp(s_serial_buffer, "display pds", 12)) {
+        ret = DisplayPDS;
+    }
 
+    s_command_decodable = false;
 	return ret;
 }
 
+static cyg_uint32 t;
 cyg_uint32 serial_isr_handler(cyg_vector_t vector, cyg_addrword_t data)
 {
-    if (!c_empty)
+    if (!c_empty) {
+		cyg_interrupt_acknowledge(vector);
         return CYG_ISR_HANDLED;
+    }
 
 	if (ezs_serial_char_available())
 	{
@@ -142,6 +160,7 @@ cyg_uint32 serial_isr_handler(cyg_vector_t vector, cyg_addrword_t data)
 	}
 	else
 	{
+		cyg_interrupt_acknowledge(vector);
 		return CYG_ISR_HANDLED;
 	}
 
@@ -150,10 +169,9 @@ cyg_uint32 serial_isr_handler(cyg_vector_t vector, cyg_addrword_t data)
 
 void serial_dsr_handler(cyg_vector_t vec, cyg_ucount32 count, cyg_addrword_t data)
 {
-    packet_receive();
-	/*
-	 * TODO: Code ergaenzen
-	 */
+    enum CommandStatus status = packet_receive(c);
+    c_empty = true;
+
 }
 
 
@@ -166,6 +184,8 @@ static void polling_task_entry(cyg_addrword_t data)
 {
 	while (1)
 	{
+        enum Command cmd = decode_command();
+
 		cyg_thread_suspend(cyg_thread_self());
 	}
 }
