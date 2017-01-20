@@ -14,6 +14,12 @@ Teilaufgabe 3)
     T4: 0
     T5: 140
 
+
+        Bezeichnung         Min. Zwischenankunftszeit[ms]   WCET[ms]
+    T6: Byteweiser Empfang                ?                     –
+    T7: Dekodierung                       ?                    0,5
+    T8: Zustandsverwaltung                ?                     –
+
 Teilaufgabe 4)
     Bei der Repraesentation von Strings in C handelt es sich um gar finstres Hexenwerk.
     Wer ueber Kenntnisse ueber diese verfuegt oder danach strebt, diese zu erlangen, macht sich der
