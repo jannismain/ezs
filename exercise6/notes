@@ -8,19 +8,6 @@ Teilaufgabe 2)
 
     Hier: ???
 
-    T1: wcet = 0.5, e_i = p_i = 4   -> ok
-    T2: Verzoegerung  durch hoeherpriore tasks pro 10ms: max. 1.5ms
-        1.5ms + 1ms = 2.5ms <= 10ms ->ok
-    T4: wcet = 101ms, e_i = p_i = 250
-        Verzoegerung  durch hoeherpriore tasks pro 250ms: max. 2.5ms*25 = 62.5ms
-        62.5ms + 101ms = 163.5ms <= 250ms -> ok
-    T3: wcet = 11ms, e_i = p_i = 1000
-        Verzoegerung  durch hoeherpriore tasks pro 1000ms: max. 163.5ms*4 = 654ms
-        654ms + 11ms = 665ms <= 1000ms -> ok
-    T3: wcet = 67ms, e_i = p_i = 1000
-        Verzoegerung  durch hoeherpriore tasks pro 1000ms: max. 665ms
-        665ms + 67ms <= 1000ms -> ok
-
 Teilaufgabe 3)
     T1: 0
     T2: 1

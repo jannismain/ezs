@@ -28,9 +28,9 @@
 #define DISPLAY_PDS_TASK_PRIORITY 14
 #define ANALYSIS_TASK_PRIORITY 13
 
-#define DECODING_TASK_PRIORITY 0
-#define POLLING_TASK_PRIORITY 0
-#define STATEMACHINE_TASK_PRIORITY 0
+#define DECODING_TASK_PRIORITY 1
+#define POLLING_TASK_PRIORITY 2
+#define STATEMACHINE_TASK_PRIORITY 3
 
 #define SAMPLING_TASK_PERIOD 4
 #define PROCRASTINATION_TASK_PERIOD 10
@@ -79,6 +79,7 @@ static enum CommandStatus packet_receive(char c)
         s_serial_buffer[s_serial_position] = '\0';
         s_serial_position = 0;
         s_command_decodable = true;
+        ezs_printf("%s\n", s_serial_buffer);
         return CommandComplete;
     }
 
@@ -135,7 +136,7 @@ enum Command decode_command(void)
         return ret;
     if (!strncmp(s_serial_buffer, "display signal", 15)) {
         ret = DisplayTime;
-    } else if (!strncmp(s_serial_buffer, "display pds", 12)) {
+    } else if (!strncmp(s_serial_buffer, "display pds", 15)) {
         ret = DisplayPDS;
     }
 
@@ -166,15 +167,6 @@ cyg_uint32 serial_isr_handler(cyg_vector_t vector, cyg_addrword_t data)
 
 }
 
-
-void serial_dsr_handler(cyg_vector_t vec, cyg_ucount32 count, cyg_addrword_t data)
-{
-    enum CommandStatus status = packet_receive(c);
-    c_empty = true;
-
-}
-
-
 // periodischer Zusteller
 // T7
 static cyg_uint8     polling_task_stack[STACKSIZE];
@@ -185,7 +177,7 @@ static void polling_task_entry(cyg_addrword_t data)
 	while (1)
 	{
         enum Command cmd = decode_command();
-
+        ezs_printf("poll\n");
 		cyg_thread_suspend(cyg_thread_self());
 	}
 }
@@ -199,11 +191,24 @@ static void statemachine_task_entry(cyg_addrword_t data)
 {
 	while (1)
 	{
-		/*
-		 * TODO: Code ergaenzen
-		 */
+        
+
+		cyg_thread_suspend(cyg_thread_self());
 	}
 }
+
+
+void serial_dsr_handler(cyg_vector_t vec, cyg_ucount32 count, cyg_addrword_t data)
+{
+    enum CommandStatus status = packet_receive(c);
+    c_empty = true;
+
+    if (status == CommandIncomplete)
+        return;
+
+    cyg_thread_resume(polling_task_handle);
+}
+
 
 // T1
 static cyg_uint8     sampling_task_stack[STACKSIZE];
@@ -358,6 +363,9 @@ void cyg_user_start(void)
 	cyg_thread_create(DISPLAY_SIGNAL_TASK_PRIORITY, &display_signal_task_entry, 0, "display signal task",
 	                  display_signal_task_stack, STACKSIZE,
 	                  &display_signal_task_handle, &display_signal_task_thread);
+	cyg_thread_create(DISPLAY_PDS_TASK_PRIORITY, &display_pds_task_entry, 0, "display pds task",
+	                  display_pds_task_stack, STACKSIZE,
+	                  &display_pds_task_handle, &display_pds_task_thread);
 	cyg_thread_create(DISPLAY_PDS_TASK_PRIORITY, &display_pds_task_entry, 0, "display pds task",
 	                  display_pds_task_stack, STACKSIZE,
 	                  &display_pds_task_handle, &display_pds_task_thread);
