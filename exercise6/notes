@@ -19,12 +19,31 @@ Teilaufgabe 4)
     Wer ueber Kenntnisse ueber diese verfuegt oder danach strebt, diese zu erlangen, macht sich der
     Hexerei schuldig und ist umgehend dem oertlichen Inquisitor zu ueberantworten.
 
-Teilaufgabe 6)
+Teilaufgabe 5)
+    Wieso ist es grundsätzlich sinnvoll strncmp() anstatt strcmp() zu verwenden
+
+    sollte der string nicht \0 terminiert sein,
+    kann es sinnvoll sein den gelesenen Bereich auf die Bufferlaenge einzuschraenken, um nicht irgendwas nicht intendiertes zu lesen.
+
+    Buffergroesse
+
+Teilaufgabe 6)          
     minimale Dauer der Interrupts in Faellen, in denen eine DSR angefordert wird
     Ermitteln durch Messen??? Berechnen aus BAUD-Rate??? 
+    Messen: 1,952 us
 
-Teilaufgabe 7 + 8) keine Ahnung
+Teilaufgabe 7) 
+    WC: time(isr) + time(dsr)
 
+Teilaufgabe 8)
+    Interrupts streckenweisse disablen, in isr oder dsr dinge verzoegern --> unschoen
+    - in der dsr wird bei kompletten Kommandos mit zu wenig zeichen das Kommando verworfen und kein Thread angefordert
+
+Teilaufgabe 9)
+    Unterbrecherbetrieb 9 us
+    periodischer Zusteller: Werte zwischen 2 ms und 49 ms bei 10 Messungen: 29,1 ms, Periode 50ms
+    hintergrund: Werte zwischen 5 und 101ms, Durchschnitt 40,7 ms
+ 
 Teilaufgabe 10)
     Nutzung der Bufer durch verschieden Threads -> Wettlaufsituationen moeglich
     dadurch nicht immer garantiert, dass die Werte in der Schreibreihenfolge gelesen werden, "Luecken" in gelesenen WErten moeglich
