@@ -1,14 +1,17 @@
-Teilaufgabe 2)
+Teilaufgabe 2) Messen Sie die Laufzeit von
+T3, T4 und T5 und nehmen Sie das Maximum als Annäherung für die WCET.
     T3: <=  11 ms
     T4: <= 101 ms
     T5: <=  67 ms
-    gemessen mit disabled Interrrupts und deactivierten anderren Threads
+    gemessen mit disabled Interrupts und deaktivierten anderen Threads
 
-    Einhaltung der Deadlines unter RMA: ???
+Wann ist die Einhaltung der Deadlines unter RMA garantiert?
+    ???
 
-    Hier: ???
+Angenommen, eCos hätte einen Scheduler, der gemäß EDF funktioniert – ist garantiert, dass alle Termine eingehalten werden?
+    ???
 
-Teilaufgabe 3)
+Teilaufgabe 3) Passen Sie den Phasenversatz nun so an, dass sich T1 und T2 beziehungsweise T4 und T5 nicht überlappen.
     T1: 0
     T2: 1
     T4: 0
@@ -25,7 +28,14 @@ Teilaufgabe 4)
     Wer ueber Kenntnisse ueber diese verfuegt oder danach strebt, diese zu erlangen, macht sich der
     Hexerei schuldig und ist umgehend dem oertlichen Inquisitor zu ueberantworten.
 
-Teilaufgabe 6)
+Teilaufgabe 5) Wieso ist es grundsätzlich sinnvoll strncmp() anstatt strcmp() zu verwenden?
+
+
+Welche Größe muss strncmp() als Länge übergeben werden? Wieso?
+
+
+Teilaufgabe 6) Minimale Zwischenankunftszeit der aperiodischen Aufgaben T6 bestimmen
+
     minimale Dauer der Interrupts in Faellen, in denen eine DSR angefordert wird
     Ermitteln durch Messen??? Berechnen aus BAUD-Rate???
 
@@ -34,9 +44,35 @@ T7
 
 Teilaufgabe 8) Wie lässt sie sich deutlich vergrößern?
 
-Teilaufgabe 10)
-    Nutzung der Bufer durch verschieden Threads -> Wettlaufsituationen moeglich
-    dadurch nicht immer garantiert, dass die Werte in der Schreibreihenfolge gelesen werden, "Luecken" in gelesenen WErten moeglich
-    Gegenmassnahme: Ablaufplan so erstellen, dass keine Wettlaufsituationen zwischen Lese- und Schreibthreads entstehen
+Teilaufgabe 9) Realisieren Sie nacheinander die drei verschiedenen Ausführungskonzepte für aperiodische Aufgaben (Unterbrecher-, Hintergrundbetrieb, periodischer Zusteller). Messen Sie jeweils die Antwortzeit von T7.
 
-Teilaufgabe
+
+    Unterbrecherbetrieb [ms]:
+    Hintergrundbetrieb [ms]:
+    Periodischer Zusteller [ms]:
+
+Teilaufgabe 10) Welches Problem ergibt sich aus der Nutzung der globalen Puffer zum Datenaustausch? Wie könnte man dieses Problem vermeiden?
+
+    Probleme:
+    - Nutzung der Buffer durch verschieden Threads
+        -> Wettlaufsituationen moeglich (dadurch nicht immer garantiert, dass die Werte in der Schreibreihenfolge gelesen werden, "Luecken" in gelesenen WErten moeglich)
+    Gegenmassnahme:
+        - Ablaufplan so erstellen, dass keine Wettlaufsituationen zwischen Lese- und Schreibthreads entstehen
+
+Teilaufgabe 11) Umsetzung der State-Machine
+- T7 auf Hintergrundbetrieb
+- enum fuer state
+- Event fuer Aufwecken des Fadens und Weitergabe des befehls
+
+Teilaufgabe 12)
+a) Welche Variante zur Überprüfung der Events muss hier verwendet werden?
+
+
+b) Welche Betriebszustände können auftreten und müssen von T8 abgebildet werden?
+
+
+c) Wie müssen die weiterhin periodischen Aufgaben T1 bis T5 in Abhängigkeit vom Betriebszustand verhalten?
+
+Teilaufgabe 13) T8 fuer Betriebswechsel implementieren
+
+Teilaufgabe 14) Wo sehen Sie die Vorteile eines expliziten Betriebswechsels? Wo liegen die Herausforderungen?
