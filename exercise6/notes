@@ -30,26 +30,31 @@ Teilaufgabe 4)
 
 Teilaufgabe 5) Wieso ist es grundsätzlich sinnvoll strncmp() anstatt strcmp() zu verwenden?
 
+    sollte der string nicht \0 terminiert sein,
+    kann es sinnvoll sein den gelesenen Bereich auf die Bufferlaenge einzuschraenken, um nicht irgendwas nicht intendiertes zu lesen.
 
 Welche Größe muss strncmp() als Länge übergeben werden? Wieso?
 
+    Buffergroesse
 
 Teilaufgabe 6) Minimale Zwischenankunftszeit der aperiodischen Aufgaben T6 bestimmen
-
     minimale Dauer der Interrupts in Faellen, in denen eine DSR angefordert wird
     Ermitteln durch Messen??? Berechnen aus BAUD-Rate???
+    Messen: 1,952 us
 
-Teilaufgabe 7) Welche minimale Zwischenankunftszeit ergibt sich daraus für
-T7
 
-Teilaufgabe 8) Wie lässt sie sich deutlich vergrößern?
+Teilaufgabe 7)
+    WC: time(isr) + time(dsr)
+
+Teilaufgabe 8)
+    Interrupts streckenweisse disablen, in isr oder dsr dinge verzoegern --> unschoen
+    - in der dsr wird bei kompletten Kommandos mit zu wenig zeichen das Kommando verworfen und kein Thread angefordert
 
 Teilaufgabe 9) Realisieren Sie nacheinander die drei verschiedenen Ausführungskonzepte für aperiodische Aufgaben (Unterbrecher-, Hintergrundbetrieb, periodischer Zusteller). Messen Sie jeweils die Antwortzeit von T7.
 
-
-    Unterbrecherbetrieb [ms]:
-    Hintergrundbetrieb [ms]:
-    Periodischer Zusteller [ms]:
+    Unterbrecherbetrieb [us]:    9
+    Hintergrundbetrieb [ms]:     [5-101], Mittel: 40,7
+    Periodischer Zusteller [ms]: [2-49], Mittel: 29,1 (Periode: 50)
 
 Teilaufgabe 10) Welches Problem ergibt sich aus der Nutzung der globalen Puffer zum Datenaustausch? Wie könnte man dieses Problem vermeiden?
 
