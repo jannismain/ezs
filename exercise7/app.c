@@ -76,6 +76,7 @@ static cyg_handle_t display_signal_task_alarm_handle;
 static cyg_handle_t display_pds_task_alarm_handle;
 static cyg_handle_t polling_task_alarm_handle;
 static cyg_handle_t statemachine_task_alarm_handle;
+static cyg_handle_t trigger_task_alarm_handle;
 
 
 static cyg_alarm sampling_task_alarm;
@@ -85,6 +86,7 @@ static cyg_alarm display_signal_task_alarm;
 static cyg_alarm display_pds_task_alarm;
 static cyg_alarm polling_task_alarm;
 static cyg_alarm statemachine_task_alarm;
+static cyg_alarm trigger_task_alarm;
 
 //FLAG t1, t2
 static cyg_flag_t flag;
@@ -226,6 +228,44 @@ static void polling_task_entry(cyg_addrword_t data)
 enum State state = StateDisplayTime;
 static cyg_uint8 trigger_high = 0;
 static cyg_uint8 trigger_low = 1;
+
+// Helper function for statemachine
+static void switch_to_time_mode(void)
+{
+    // disable: T2, T4, T5, T9
+    cyg_alarm_disable(edge_task_alarm_handle);
+    cyg_alarm_disable(analysis_task_alarm_handle);
+    cyg_alarm_disable(display_pds_task_alarm_handle);
+    cyg_alarm_disable(trigger_task_alarm_handle);
+
+    // enable:  T3
+    cyg_alarm_enable(display_signal_task_alarm_handle);
+}
+
+static void switch_to_pds_mode(void)
+{
+    // disable: T2, T3, T9
+    cyg_alarm_disable(edge_task_alarm_handle);
+    cyg_alarm_disable(display_signal_task_alarm_handle);
+    cyg_alarm_disable(trigger_task_alarm_handle);
+
+    // enable:  T4, T5
+    cyg_alarm_enable(analysis_task_alarm_handle);
+    cyg_alarm_enable(display_pds_task_alarm_handle);
+}
+
+static void switch_to_trigger_mode(void)
+{
+    // disable: T3, T4, T5
+    cyg_alarm_disable(display_signal_task_alarm_handle);
+    cyg_alarm_disable(analysis_task_alarm_handle);
+    cyg_alarm_disable(display_pds_task_alarm_handle);
+
+    // enable:  T2, T9
+    cyg_alarm_enable(edge_task_alarm_handle);
+    cyg_alarm_enable(trigger_task_alarm_handle);
+}
+
 // T8
 static cyg_uint8     statemachine_task_stack[STACKSIZE];
 static cyg_handle_t  statemachine_task_handle;
@@ -240,6 +280,13 @@ static void statemachine_task_entry(cyg_addrword_t data)
                 if (state & StateDisplayTime)
                     break;
                 state |= StateDisplayTime;
+
+                if (state & StateTriggerOn) {
+                    switch_to_trigger_mode();
+                } else {
+                    switch_to_time_mode();
+                }
+
                 break;
             }             
             case (DisplayPDS):
@@ -247,6 +294,9 @@ static void statemachine_task_entry(cyg_addrword_t data)
                 if (!(state & StateDisplayTime))
                     break;
                 state &= ~(StateDisplayTime);
+
+                switch_to_pds_mode();
+
                 break;
             }
             case (TriggerOn):
@@ -254,6 +304,10 @@ static void statemachine_task_entry(cyg_addrword_t data)
                 if (state & StateTriggerOn)
                     break;
                 state |= StateTriggerOn;
+
+                if (state & StateDisplayTime)
+                    switch_to_trigger_mode();
+
                 break;
             }
             case (TriggerOff):
@@ -261,6 +315,10 @@ static void statemachine_task_entry(cyg_addrword_t data)
                 if (!(state & StateTriggerOn))
                     break;
                 state &= ~(StateTriggerOn);
+
+                if (state & StateDisplayTime)
+                    switch_to_time_mode();
+
                 break;
             }
             case (TLevelRise):
@@ -429,6 +487,11 @@ static void statemachine_task_alarmfn(cyg_handle_t alarmH, cyg_addrword_t data)
 	cyg_thread_resume(statemachine_task_handle);
 }
 
+static void trigger_task_alarmfn(cyg_handle_t alarmH, cyg_addrword_t data)
+{
+	cyg_thread_resume(trigger_task_handle);
+}
+
 
 static cyg_handle_t real_time_counter;
 
@@ -479,22 +542,25 @@ void cyg_user_start(void)
 	
     cyg_clock_to_counter(cyg_real_time_clock(), &real_time_counter);
 	cyg_uint32 timebase = cyg_current_time() + 3;
+
 	cyg_alarm_create(real_time_counter, sampling_task_alarmfn, data_dummy, &sampling_task_alarm_handle, &sampling_task_alarm);
 	cyg_alarm_initialize(sampling_task_alarm_handle, timebase + ms_to_cyg_ticks(SAMPLING_TASK_PHASE), ms_to_cyg_ticks(SAMPLING_TASK_PERIOD));
 	cyg_alarm_create(real_time_counter, edge_task_alarmfn, data_dummy, &edge_task_alarm_handle, &edge_task_alarm);
 	cyg_alarm_initialize(edge_task_alarm_handle, timebase + ms_to_cyg_ticks(EDGE_TASK_PHASE), ms_to_cyg_ticks(EDGE_TASK_PERIOD));
-
     cyg_alarm_create(real_time_counter, analysis_task_alarmfn, data_dummy, &analysis_task_alarm_handle, &analysis_task_alarm);
     cyg_alarm_initialize(analysis_task_alarm_handle, timebase + ms_to_cyg_ticks(ANALYSIS_TASK_PHASE), ms_to_cyg_ticks(ANALYSIS_TASK_PERIOD));
-
 	cyg_alarm_create(real_time_counter, display_signal_task_alarmfn, data_dummy, &display_signal_task_alarm_handle, &display_signal_task_alarm);
 	cyg_alarm_initialize(display_signal_task_alarm_handle, timebase + ms_to_cyg_ticks(DISPLAY_SIGNAL_TASK_PHASE), ms_to_cyg_ticks(DISPLAY_SIGNAL_TASK_PERIOD));
 	cyg_alarm_create(real_time_counter, display_pds_task_alarmfn, data_dummy, &display_pds_task_alarm_handle, &display_pds_task_alarm);
 	cyg_alarm_initialize(display_pds_task_alarm_handle, timebase + ms_to_cyg_ticks(DISPLAY_PDS_TASK_PHASE), ms_to_cyg_ticks(DISPLAY_PDS_TASK_PERIOD));
 	cyg_alarm_create(real_time_counter, polling_task_alarmfn, data_dummy, &polling_task_alarm_handle, &polling_task_alarm);
 	cyg_alarm_initialize(polling_task_alarm_handle, timebase + ms_to_cyg_ticks(POLLING_TASK_PHASE), ms_to_cyg_ticks(POLLING_TASK_PERIOD));
+
 	cyg_alarm_create(real_time_counter, statemachine_task_alarmfn, data_dummy, &statemachine_task_alarm_handle, &statemachine_task_alarm);
-	cyg_alarm_initialize(statemachine_task_alarm_handle, timebase + ms_to_cyg_ticks(STATE_MACHINE_TASK_PHASE), ms_to_cyg_ticks(POLLING_TASK_PERIOD));
+	cyg_alarm_initialize(statemachine_task_alarm_handle, timebase + ms_to_cyg_ticks(STATE_MACHINE_TASK_PHASE), ms_to_cyg_ticks(STATE_MACHINE_TASK_PERIOD));
+
+	cyg_alarm_create(real_time_counter, trigger_task_alarmfn, data_dummy, &trigger_task_alarm_handle, &trigger_task_alarm);
+	cyg_alarm_initialize(trigger_task_alarm_handle, timebase + ms_to_cyg_ticks(TRIGGER_TASK_PHASE), ms_to_cyg_ticks(TRIGGER_TASK_PERIOD));
 
     cyg_alarm_disable(display_pds_task_alarm_handle);
     cyg_alarm_disable(analysis_task_alarm_handle);
