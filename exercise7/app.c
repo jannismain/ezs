@@ -89,7 +89,10 @@ static cyg_alarm statemachine_task_alarm;
 static cyg_alarm trigger_task_alarm;
 
 //FLAG t1, t2
+#define SIGNAL_STATE_TRIGGER    (1 << 1)
 static cyg_flag_t flag;
+static cyg_uint32 flag_value = 0;
+
 
 //Mailbox t2, t9
 static cyg_handle_t mailbox_handle;
@@ -232,6 +235,8 @@ static cyg_uint8 trigger_low = 1;
 // Helper function for statemachine
 static void switch_to_time_mode(void)
 {
+    flag_value &= ~(SIGNAL_STATE_TRIGGER);
+
     // disable: T2, T4, T5, T9
     cyg_alarm_disable(edge_task_alarm_handle);
     cyg_alarm_disable(analysis_task_alarm_handle);
@@ -244,6 +249,8 @@ static void switch_to_time_mode(void)
 
 static void switch_to_pds_mode(void)
 {
+    flag_value &= ~(SIGNAL_STATE_TRIGGER);
+
     // disable: T2, T3, T9
     cyg_alarm_disable(edge_task_alarm_handle);
     cyg_alarm_disable(display_signal_task_alarm_handle);
@@ -256,6 +263,8 @@ static void switch_to_pds_mode(void)
 
 static void switch_to_trigger_mode(void)
 {
+    flag_value |= SIGNAL_STATE_TRIGGER;
+
     // disable: T3, T4, T5
     cyg_alarm_disable(display_signal_task_alarm_handle);
     cyg_alarm_disable(analysis_task_alarm_handle);
@@ -346,14 +355,14 @@ static void statemachine_task_entry(cyg_addrword_t data)
 static cyg_uint8     trigger_task_stack[STACKSIZE];
 static cyg_handle_t  trigger_task_handle;
 static cyg_thread    trigger_task_thread;
-static void *s_trigger_data;
 static void trigger_task_entry(cyg_addrword_t data)
 {
     while (1)
     {
-        s_trigger_data = cyg_mbox_get(mailbox_handle);
-        ezs_plot(s_trigger_data, TIME_DOMAIN_LENGTH, FB_BLACK, FB_WHITE); 
-        cyg_thread_suspend(cyg_thread_self());
+        cyg_uint32 *data = cyg_mbox_get(mailbox_handle);
+        ezs_plot(data, TIME_DOMAIN_LENGTH, FB_BLACK, FB_WHITE);
+        ezs_printf("trigger\n");
+//        cyg_thread_suspend(cyg_thread_self());
     }
 }
 
@@ -367,10 +376,9 @@ static void sampling_task_entry(cyg_addrword_t data)
 	while (1)
 	{
         uint8_t x = ezs_adc_read();
-        cyg_flag_wait(&flag, 0x20, CYG_FLAG_WAITMODE_OR | CYG_FLAG_WAITMODE_CLR);
         s_time_domain[time_write++] = x;
         time_write %= TIME_DOMAIN_LENGTH;
-        cyg_flag_setbits(&flag, 0x02);
+        cyg_flag_setbits(&flag, flag_value);
 		cyg_thread_suspend(cyg_thread_self());
 	}
 }
@@ -379,27 +387,28 @@ static void sampling_task_entry(cyg_addrword_t data)
 static cyg_uint8     edge_task_stack[STACKSIZE];
 static cyg_handle_t  edge_task_handle;
 static cyg_thread    edge_task_thread;
+static cyg_uint32 trigger_data[TIME_DOMAIN_LENGTH];
 static void edge_task_entry(cyg_addrword_t data)
 {
-    cyg_uint32 old_val;
+    static cyg_uint32 old_value = 188;
+    static cyg_uint32 idx = 0;
+
 	while (1)
 	{
-        cyg_flag_wait(&flag, 0x02, CYG_FLAG_WAITMODE_OR | CYG_FLAG_WAITMODE_CLR);
-        if(time_write == 0) old_val = TIME_DOMAIN_LENGTH-1;
-        else old_val = time_write - 1;
-	    
-        if((s_time_domain[time_write] > 188 && s_time_domain[old_val] < 188 && trigger_high)|| //steigende edge
-           (s_time_domain[time_write] < 188 && s_time_domain[old_val] > 188 && trigger_low))  //fallende edge
-        {   
-            // daten per mailbox an t9
-            cyg_mbox_put(mailbox_handle, s_time_domain);
-            // t9 aktivieren
-            cyg_thread_resume(trigger_task_handle);
-            cyg_flag_setbits(&flag, 0x20); // t1 arbeitet weiter
-        } else {
-            cyg_flag_setbits(&flag, 0x20); // t1 arbeitet weiter
+        cyg_flag_wait(&flag, SIGNAL_STATE_TRIGGER, CYG_FLAG_WAITMODE_OR | CYG_FLAG_WAITMODE_CLR);
+
+        uint8_t value = s_time_domain[idx];
+
+        if ( (old_value < 188 && value > 188 && (state & StateTLevelRise))          // rising edge
+             || (old_value > 188 && value < 188 && !(state & StateTLevelRise)) ) {  // falling edge
+            cyg_mbox_put(mailbox_handle, (void *)(trigger_data));
         }
-    	cyg_thread_suspend(cyg_thread_self());
+
+        trigger_data[idx] = value;
+
+        idx = (idx + 1) % TIME_DOMAIN_LENGTH;
+        old_value = value;
+//    	cyg_thread_suspend(cyg_thread_self());
 	}
 }
 
@@ -505,6 +514,10 @@ void cyg_user_start(void)
 	ezs_counter_init();
 	ezs_sensors_init();
 	ezs_fel_serial_init();
+
+    cyg_flag_init(&flag);
+    cyg_mbox_create(&mailbox_handle, &mailbox);
+
 	cyg_interrupt_create(SERIAL_IRQ,
 	                     1,
 	                     0,
@@ -565,8 +578,5 @@ void cyg_user_start(void)
     cyg_alarm_disable(display_pds_task_alarm_handle);
     cyg_alarm_disable(analysis_task_alarm_handle);
     cyg_alarm_disable(edge_task_alarm_handle);
-    
-    cyg_flag_init(&flag);
-    cyg_flag_setbits(&flag, 0x20);
-    cyg_mbox_create(&mailbox_handle, &mailbox);
+    cyg_alarm_disable(trigger_task_alarm_handle);
 }
