@@ -127,11 +127,8 @@ enum Command
 enum State
 {
 	StateDisplayTime    = (1 << 1),
-	StateDisplayPDS     = (1 << 2),
-	StateTriggerOn      = (1 << 3),
-	StateTriggerOff     = (1 << 4),
-	StateTLevelRise     = (1 << 5),
-	StateTLevelFall     = (1 << 6),
+	StateTriggerOn      = (1 << 2),
+	StateTLevelRise     = (1 << 3),
 };
 //Little helper functions.
 static cyg_tick_count_t ms_to_cyg_ticks(cyg_uint32 ms)
@@ -238,88 +235,54 @@ static void statemachine_task_entry(cyg_addrword_t data)
 	while (1)
 	{
         switch (cmd) {
+            case (DisplayTime):
+            {
+                if (state & StateDisplayTime)
+                    break;
+                state |= StateDisplayTime;
+                break;
+            }             
             case (DisplayPDS):
             {
-                if (state == StateDisplayPDS)
+                if (!(state & StateDisplayTime))
                     break;
-                if (state == StateDisplayTime || state == StateTriggerOn || state == StateTriggerOff
-                    ||  state == StateTLevelRise || state == StateTLevelFall) {//XXX Trigger on and display pds sollte nicht sinnig sein, pds normal darstellen???
-                    // disable: t4, t2
-                    // enavle: t3, t5
-                    cyg_alarm_disable(display_signal_task_alarm_handle);
-                    cyg_alarm_disable(edge_task_alarm_handle);
-                    cyg_alarm_enable(analysis_task_alarm_handle);
-                    cyg_alarm_enable(display_pds_task_alarm_handle);
-                    state = StateDisplayPDS;    
-                    break;
-                }
+                state &= ~(StateDisplayTime);
+                break;
             }
-            case (DisplayTime):
-            {  
-                if (state == StateDisplayTime)
-                    break;
-                if (state == StateDisplayTime || state == StateTriggerOn || state == StateTriggerOff
-                    ||  state == StateTLevelRise || state == StateTLevelFall) {
-                    cyg_alarm_disable(analysis_task_alarm_handle);
-                    cyg_alarm_disable(display_pds_task_alarm_handle);
-                    cyg_alarm_enable(display_signal_task_alarm_handle);
-                    state = StateDisplayTime;
-                    break;
-                }
-            }             
             case (TriggerOn):
             {
-                if (state == StateTriggerOn)
+                if (state & StateTriggerOn)
                     break;
-                if (state == StateDisplayTime || state == StateTriggerOff ||  state == StateTLevelRise
-                    || state == StateTLevelFall || state == StateDisplayPDS) {
-                    cyg_alarm_enable(edge_task_alarm_handle); 
-                    state = StateTriggerOn;
-                    break;
-                }
+                state |= StateTriggerOn;
+                break;
             }
             case (TriggerOff):
             {
-                if (state == StateTriggerOff)
+                if (!(state & StateTriggerOn))
                     break;
-                if (state == StateDisplayTime || state == StateTriggerOn ||  state == StateTLevelRise
-                    || state == StateTLevelFall || state == StateDisplayPDS) {
-                    cyg_alarm_disable(edge_task_alarm_handle); 
-                    state = StateTriggerOff;
-                    break;
-                }
+                state &= ~(StateTriggerOn);
+                break;
             }
             case (TLevelRise):
             {
-                if (state == StateTLevelRise)
+                if (state & StateTLevelRise)
                     break;
-                if (state == StateDisplayTime || state == StateTriggerOn ||  state == StateTriggerOff
-                    || state == StateTLevelFall || state == StateDisplayPDS) {
-                    trigger_high    = 1;
-                    trigger_low     = 0;
-                    state = StateTLevelRise;
-                }
+                state |= StateTLevelRise;
+                break;
             }
-
             case (TLevelFall):
             {
-                if (state == StateTLevelFall)
+                if (!(state & StateTLevelRise))
                     break;
-                if (state == StateDisplayTime || state == StateTriggerOn ||  state == StateTriggerOff
-                    || state == StateTLevelRise || state == StateDisplayPDS) {
-                    trigger_high    = 1;
-                    trigger_low     = 0;
-                    state = StateTLevelRise;
-                }
+                state &= ~(StateTLevelRise);
+                break;
             }
+        }
 
+        cmd = Invalid;
 
-            cmd = Invalid;
-
-		    cyg_thread_suspend(cyg_thread_self());
-	    }
-    }   
-
+        cyg_thread_suspend(cyg_thread_self());
+    }
 }
 //T9
 static cyg_uint8     trigger_task_stack[STACKSIZE];
