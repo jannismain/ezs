@@ -23,7 +23,7 @@
  * TODO: Code anpassen
  */
 #define SAMPLING_TASK_PRIORITY 10
-#define FLANK_TASK_PRIORITY 11
+#define EDGE_TASK_PRIORITY 11
 #define DISPLAY_SIGNAL_TASK_PRIORITY 14
 #define DISPLAY_PDS_TASK_PRIORITY 16
 #define ANALYSIS_TASK_PRIORITY 15
@@ -34,7 +34,7 @@
 #define TRIGGER_TASK_PRIORITY 16
 
 #define SAMPLING_TASK_PERIOD 4
-#define FLANK_TASK_PERIOD 4
+#define EDGE_TASK_PERIOD 4
 #define DISPLAY_SIGNAL_TASK_PERIOD 250
 #define DISPLAY_PDS_TASK_PERIOD 1000
 #define ANALYSIS_TASK_PERIOD 1000
@@ -42,10 +42,8 @@
 #define STATE_MACHINE_TASK_PERIOD 50
 #define TRIGGER_TASK_PERIOD 250
 
-#define FLANK_WCET 1
-
 #define SAMPLING_TASK_PHASE 0
-#define FLANK_TASK_PHASE 1
+#define EDGE_TASK_PHASE 1
 #define ANALYSIS_TASK_PHASE 0
 #define DISPLAY_SIGNAL_TASK_PHASE 0
 #define DISPLAY_PDS_TASK_PHASE 140
@@ -72,7 +70,7 @@ static unsigned int s_serial_position = 0;
 static bool s_command_decodable = false;
 
 static cyg_handle_t sampling_task_alarm_handle;
-static cyg_handle_t flank_task_alarm_handle;
+static cyg_handle_t edge_task_alarm_handle;
 static cyg_handle_t analysis_task_alarm_handle;
 static cyg_handle_t display_signal_task_alarm_handle;
 static cyg_handle_t display_pds_task_alarm_handle;
@@ -81,7 +79,7 @@ static cyg_handle_t statemachine_task_alarm_handle;
 
 
 static cyg_alarm sampling_task_alarm;
-static cyg_alarm flank_task_alarm;
+static cyg_alarm edge_task_alarm;
 static cyg_alarm analysis_task_alarm;
 static cyg_alarm display_signal_task_alarm;
 static cyg_alarm display_pds_task_alarm;
@@ -249,7 +247,7 @@ static void statemachine_task_entry(cyg_addrword_t data)
                     // disable: t4, t2
                     // enavle: t3, t5
                     cyg_alarm_disable(display_signal_task_alarm_handle);
-                    cyg_alarm_disable(flank_task_alarm_handle);
+                    cyg_alarm_disable(edge_task_alarm_handle);
                     cyg_alarm_enable(analysis_task_alarm_handle);
                     cyg_alarm_enable(display_pds_task_alarm_handle);
                     state = StateDisplayPDS;    
@@ -275,7 +273,7 @@ static void statemachine_task_entry(cyg_addrword_t data)
                     break;
                 if (state == StateDisplayTime || state == StateTriggerOff ||  state == StateTLevelRise
                     || state == StateTLevelFall || state == StateDisplayPDS) {
-                    cyg_alarm_enable(flank_task_alarm_handle); 
+                    cyg_alarm_enable(edge_task_alarm_handle); 
                     state = StateTriggerOn;
                     break;
                 }
@@ -286,7 +284,7 @@ static void statemachine_task_entry(cyg_addrword_t data)
                     break;
                 if (state == StateDisplayTime || state == StateTriggerOn ||  state == StateTLevelRise
                     || state == StateTLevelFall || state == StateDisplayPDS) {
-                    cyg_alarm_disable(flank_task_alarm_handle); 
+                    cyg_alarm_disable(edge_task_alarm_handle); 
                     state = StateTriggerOff;
                     break;
                 }
@@ -357,10 +355,10 @@ static void sampling_task_entry(cyg_addrword_t data)
 }
 
 // T2
-static cyg_uint8     flank_task_stack[STACKSIZE];
-static cyg_handle_t  flank_task_handle;
-static cyg_thread    flank_task_thread;
-static void flank_task_entry(cyg_addrword_t data)
+static cyg_uint8     edge_task_stack[STACKSIZE];
+static cyg_handle_t  edge_task_handle;
+static cyg_thread    edge_task_thread;
+static void edge_task_entry(cyg_addrword_t data)
 {
     cyg_uint32 old_val;
 	while (1)
@@ -369,8 +367,8 @@ static void flank_task_entry(cyg_addrword_t data)
         if(time_write == 0) old_val = TIME_DOMAIN_LENGTH-1;
         else old_val = time_write - 1;
 	    
-        if((s_time_domain[time_write] > 188 && s_time_domain[old_val] < 188 && trigger_high)|| //steigende Flanke
-           (s_time_domain[time_write] < 188 && s_time_domain[old_val] > 188 && trigger_low))  //fallende Flanke
+        if((s_time_domain[time_write] > 188 && s_time_domain[old_val] < 188 && trigger_high)|| //steigende edge
+           (s_time_domain[time_write] < 188 && s_time_domain[old_val] > 188 && trigger_low))  //fallende edge
         {   
             // daten per mailbox an t9
             cyg_mbox_put(mailbox_handle, s_time_domain);
@@ -438,9 +436,9 @@ static void sampling_task_alarmfn(cyg_handle_t alarmH, cyg_addrword_t data)
 	cyg_thread_resume(sampling_task_handle);
 }
 
-static void flank_task_alarmfn(cyg_handle_t alarmH, cyg_addrword_t data)
+static void edge_task_alarmfn(cyg_handle_t alarmH, cyg_addrword_t data)
 {
-	cyg_thread_resume(flank_task_handle);
+	cyg_thread_resume(edge_task_handle);
 }
 
 static void analysis_task_alarmfn(cyg_handle_t alarmH, cyg_addrword_t data)
@@ -494,9 +492,9 @@ void cyg_user_start(void)
 	cyg_thread_create(SAMPLING_TASK_PRIORITY, &sampling_task_entry, 0, "sampling task",
 	                  sampling_task_stack, STACKSIZE,
 	                  &sampling_task_handle, &sampling_task_thread);
-	cyg_thread_create(FLANK_TASK_PRIORITY, &flank_task_entry, 0, "flank task",
-	                  flank_task_stack, STACKSIZE,
-	                  &flank_task_handle, &flank_task_thread);
+	cyg_thread_create(EDGE_TASK_PRIORITY, &edge_task_entry, 0, "edge task",
+	                  edge_task_stack, STACKSIZE,
+	                  &edge_task_handle, &edge_task_thread);
 	cyg_thread_create(ANALYSIS_TASK_PRIORITY, &analysis_task_entry, 0, "analysis task",
 	                  analysis_task_stack, STACKSIZE,
 	                  &analysis_task_handle, &analysis_task_thread);
@@ -520,8 +518,8 @@ void cyg_user_start(void)
 	cyg_uint32 timebase = cyg_current_time() + 3;
 	cyg_alarm_create(real_time_counter, sampling_task_alarmfn, data_dummy, &sampling_task_alarm_handle, &sampling_task_alarm);
 	cyg_alarm_initialize(sampling_task_alarm_handle, timebase + ms_to_cyg_ticks(SAMPLING_TASK_PHASE), ms_to_cyg_ticks(SAMPLING_TASK_PERIOD));
-	cyg_alarm_create(real_time_counter, flank_task_alarmfn, data_dummy, &flank_task_alarm_handle, &flank_task_alarm);
-	cyg_alarm_initialize(flank_task_alarm_handle, timebase + ms_to_cyg_ticks(FLANK_TASK_PHASE), ms_to_cyg_ticks(FLANK_TASK_PERIOD));
+	cyg_alarm_create(real_time_counter, edge_task_alarmfn, data_dummy, &edge_task_alarm_handle, &edge_task_alarm);
+	cyg_alarm_initialize(edge_task_alarm_handle, timebase + ms_to_cyg_ticks(EDGE_TASK_PHASE), ms_to_cyg_ticks(EDGE_TASK_PERIOD));
 
     cyg_alarm_create(real_time_counter, analysis_task_alarmfn, data_dummy, &analysis_task_alarm_handle, &analysis_task_alarm);
     cyg_alarm_initialize(analysis_task_alarm_handle, timebase + ms_to_cyg_ticks(ANALYSIS_TASK_PHASE), ms_to_cyg_ticks(ANALYSIS_TASK_PERIOD));
@@ -537,7 +535,7 @@ void cyg_user_start(void)
 
     cyg_alarm_disable(display_pds_task_alarm_handle);
     cyg_alarm_disable(analysis_task_alarm_handle);
-    cyg_alarm_disable(flank_task_alarm_handle);
+    cyg_alarm_disable(edge_task_alarm_handle);
     
     cyg_flag_init(&flag);
     cyg_flag_setbits(&flag, 0x20);
