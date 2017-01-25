@@ -60,7 +60,7 @@ static float s_frequency_domain[PDS_LENGTH];
 //static unsigned int s_position = 0;
 static unsigned int time_write = 0;
 static unsigned int time_read_3 = 0;
-static unsigned int time_read_4 = 0;
+//static unsigned int time_read_4 = 0;
 
 #define SERIAL_BUFFER_LENGTH 15
 static volatile char c;
@@ -229,8 +229,6 @@ static void polling_task_entry(cyg_addrword_t data)
 
 // Zustandsmaschine
 enum State state = StateDisplayTime;
-static cyg_uint8 trigger_high = 0;
-static cyg_uint8 trigger_low = 1;
 
 // Helper function for statemachine
 static void switch_to_time_mode(void)
@@ -362,7 +360,7 @@ static void trigger_task_entry(cyg_addrword_t data)
         cyg_uint32 *data = cyg_mbox_get(mailbox_handle);
         ezs_plot(data, TIME_DOMAIN_LENGTH, FB_BLACK, FB_WHITE);
         ezs_printf("trigger\n");
-//        cyg_thread_suspend(cyg_thread_self());
+        cyg_thread_suspend(cyg_thread_self());
     }
 }
 
@@ -408,7 +406,7 @@ static void edge_task_entry(cyg_addrword_t data)
 
         idx = (idx + 1) % TIME_DOMAIN_LENGTH;
         old_value = value;
-//    	cyg_thread_suspend(cyg_thread_self());
+    	cyg_thread_suspend(cyg_thread_self());
 	}
 }
 
