@@ -8,7 +8,7 @@ T5  Darstellung PDS     1000         ?
 
 ### Teilaufgabe 2: Ist ein periodisches Aufwecken der Aufgabe T2 über einen Alarm notwendig?  
     Wir geben die Daten mittels T9 sofort aus sollte im trigger_mode ein triggerereignis erkannt werden.
-    Dazu muss T2 aufgeweckt werden, damit dieses erkannt werden kann. Dies kann zB mit einen arlam geschehen.
+    Dazu muss T2 aufgeweckt werden, damit dieses erkannt werden kann. Dies kann zB mit einen alarm geschehen.
 
 ### Teilaufgabe 3: Aus den neuen Kommandos ergeben sich zusätzliche Betriebsmodi – welche?
     StateTriggerOn      

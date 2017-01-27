@@ -1,10 +1,10 @@
 # Allgemeine Informationen
-    Bezeichnung      Periode     WCET
-T1  Abtastung Signal    4       0,5
-T2  Prokrastinator      10      1,0
-T3  Analyse PDS        1000     ?
-T4  Darstellung Signal  250     ?
-T5  Darstellung PDS    1000     ?
+    Bezeichnung         Periode     WCET
+T1  Abtastung Signal    4           0,5
+T2  Prokrastinator      10          1,0
+T3  Analyse PDS         1000        ?
+T4  Darstellung Signal  250         ?
+T5  Darstellung PDS     1000        ?
 
 T1: Tastet den ADC ab und fügt die Werte in einen Ringpuffer mit 64 (TIME_DOMAIN_LENGTH) Elementen ein.
 T2: Simuliert die Laufzeit
@@ -14,9 +14,9 @@ T5: Stellt die Ergebniss der PDS-Analyse durch Aufruf der ebenfalls gegebenen Fu
 
 # Aufgabenstellung
 
-Teilaufgabe 1: Umsetzung des oben beschriebenen Systems
+##Teilaufgabe 1: Umsetzung des oben beschriebenen Systems
 
-Teilaufgabe 2) Messen Sie die Laufzeit von
+##Teilaufgabe 2) Messen Sie die Laufzeit von
 T3, T4 und T5 und nehmen Sie das Maximum als Annäherung für die WCET.
     T3: <=  11 ms
     T4: <= 101 ms
@@ -24,12 +24,17 @@ T3, T4 und T5 und nehmen Sie das Maximum als Annäherung für die WCET.
     gemessen mit disabled Interrupts und deaktivierten anderen Threads
 
 Wann ist die Einhaltung der Deadlines unter RMA garantiert?
-    ???
+    - Optimalitätsbedingungen! (in phase, )
+    - periodic tasks with unique periods (n->inf)
+        -> CPU utilization is less than 69.32%
+    - randomly generated periodic task Systems
+        -> CPU utilization is 85% or less (depends on knowing the exact task statistics like periods and deadlines)
 
 Angenommen, eCos hätte einen Scheduler, der gemäß EDF funktioniert – ist garantiert, dass alle Termine eingehalten werden?
-    ???
 
-Teilaufgabe 3) Passen Sie den Phasenversatz nun so an, dass sich T1 und T2 beziehungsweise T4 und T5 nicht überlappen.
+    Ja, wenn CPU Auslastung < 100% (therefore EDF can guarantee all the deadlines in the system at higher loading.)
+
+##Teilaufgabe 3) Passen Sie den Phasenversatz nun so an, dass sich T1 und T2 beziehungsweise T4 und T5 nicht überlappen.
     T1: 0
     T2: 1
     T4: 0
@@ -42,53 +47,66 @@ Teilaufgabe 3) Passen Sie den Phasenversatz nun so an, dass sich T1 und T2 bezie
     T7: Dekodierung                       ?                    0,5
     T8: Zustandsverwaltung                ?                     –
 
-Teilaufgabe 4)
+##Teilaufgabe 4)
     Bei der Repraesentation von Strings in C handelt es sich um gar finstres Hexenwerk.
     Wer ueber Kenntnisse ueber diese verfuegt oder danach strebt, diese zu erlangen, macht sich der
     Hexerei schuldig und ist umgehend dem oertlichen Inquisitor zu ueberantworten.
 
-Teilaufgabe 5) Wieso ist es grundsätzlich sinnvoll strncmp() anstatt strcmp() zu verwenden?
+    Array aus chars, das mit einem NULL-byte endet
+    - Puffer Größe beachten
+
+
+##Teilaufgabe 5) Wieso ist es grundsätzlich sinnvoll strncmp() anstatt strcmp() zu verwenden?
 
     sollte der string nicht \0 terminiert sein,
     kann es sinnvoll sein den gelesenen Bereich auf die Bufferlaenge einzuschraenken, um nicht irgendwas nicht intendiertes zu lesen.
 
-Welche Größe muss strncmp() als Länge übergeben werden? Wieso?
+###Welche Größe muss strncmp() als Länge übergeben werden? Wieso?
 
-    Buffergroesse
+    Puffergröße
 
-Teilaufgabe 6) Minimale Zwischenankunftszeit der aperiodischen Aufgaben T6 bestimmen
-    minimale Dauer der Interrupts in Faellen, in denen eine DSR angefordert wird
-    Ermitteln durch Messen??? Berechnen aus BAUD-Rate???
+##Teilaufgabe 6) Minimale Zwischenankunftszeit der aperiodischen Aufgaben T6 bestimmen
+    Zwischenankunftszeit: Zeit zwischen dem Auftreten und dem nächsten möglichen auftreten.
+
+    Minimale Dauer der Interrupts in Faellen, in denen eine DSR angefordert wird
+
     Messen: 1,952 us
 
 
-Teilaufgabe 7)
-    WC: time(isr) + time(dsr)
+##Teilaufgabe 7)
+    WC: time(isr) + time(dsr) = 0,5ms
 
-Teilaufgabe 8)
+##Teilaufgabe 8)
     Interrupts streckenweisse disablen, in isr oder dsr dinge verzoegern --> unschoen
     - in der dsr wird bei kompletten Kommandos mit zu wenig zeichen das Kommando verworfen und kein Thread angefordert
 
-Teilaufgabe 9) Realisieren Sie nacheinander die drei verschiedenen Ausführungskonzepte für aperiodische Aufgaben (Unterbrecher-, Hintergrundbetrieb, periodischer Zusteller). Messen Sie jeweils die Antwortzeit von T7.
+    T7 ist ein logisches Ereignis, während T6 ein physikalisches Ereignis ist.
+
+##Teilaufgabe 9) Realisieren Sie nacheinander die drei verschiedenen Ausführungskonzepte für aperiodische Aufgaben (Unterbrecher-, Hintergrundbetrieb, periodischer Zusteller). Messen Sie jeweils die Antwortzeit von T7.
 
     Unterbrecherbetrieb [us]:    9
     Hintergrundbetrieb [ms]:     [5-101], Mittel: 40,7
     Periodischer Zusteller [ms]: [2-49], Mittel: 29,1 (Periode: 50)
 
-Teilaufgabe 10) Welches Problem ergibt sich aus der Nutzung der globalen Puffer zum Datenaustausch? Wie könnte man dieses Problem vermeiden?
+    Budget des periodische Zustellers entspricht seiner WCET. Verliert Budget, wenn zu Beginn der Periode keine Aufgabe existiert.
+
+    Periodendauer + WCET
+
+##Teilaufgabe 10) Welches Problem ergibt sich aus der Nutzung der globalen Puffer zum Datenaustausch? Wie könnte man dieses Problem vermeiden?
 
     Probleme:
     - Nutzung der Buffer durch verschieden Threads
-        -> Wettlaufsituationen moeglich (dadurch nicht immer garantiert, dass die Werte in der Schreibreihenfolge gelesen werden, "Luecken" in gelesenen WErten moeglich)
-    Gegenmassnahme:
+        -> Wettlaufsituationen moeglich (dadurch nicht immer garantiert, dass die Werte in der Schreibreihenfolge gelesen werden, "Luecken" in gelesenen Werten moeglich)
+    Gegenmaßnahme:
         - Ablaufplan so erstellen, dass keine Wettlaufsituationen zwischen Lese- und Schreibthreads entstehen
 
-Teilaufgabe 11) Umsetzung der State-Machine
+
+##Teilaufgabe 11) Umsetzung der State-Machine
 - T7 auf Hintergrundbetrieb
 - enum fuer state
 - Event fuer Aufwecken des Fadens und Weitergabe des befehls
 
-Teilaufgabe 12)
+##Teilaufgabe 12)
 a) Welche Variante zur Überprüfung der Events muss hier verwendet werden?
 
 
@@ -97,6 +115,8 @@ b) Welche Betriebszustände können auftreten und müssen von T8 abgebildet werd
 
 c) Wie müssen die weiterhin periodischen Aufgaben T1 bis T5 in Abhängigkeit vom Betriebszustand verhalten?
 
-Teilaufgabe 13) T8 fuer Betriebswechsel implementieren
+##Teilaufgabe 13) T8 fuer Betriebswechsel implementieren
 
-Teilaufgabe 14) Wo sehen Sie die Vorteile eines expliziten Betriebswechsels? Wo liegen die Herausforderungen?
+##Teilaufgabe 14) Wo sehen Sie die Vorteile eines expliziten Betriebswechsels?
+
+##Wo liegen die Herausforderungen?
