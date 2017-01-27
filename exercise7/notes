@@ -21,5 +21,3 @@
 ### Teilaufgabe 5: 
     Aufgabensystem umsetzen in dem die Threads nicht von Alarmen aufgeweckt werden, sondern sich selbst geeignet aufwecken.
     mindestens 1 Alarm noetig -> T1 
-
-
