@@ -1,3 +1,21 @@
+# Allgemeine Informationen
+    Bezeichnung      Periode     WCET
+T1  Abtastung Signal    4       0,5
+T2  Prokrastinator      10      1,0
+T3  Analyse PDS        1000     ?
+T4  Darstellung Signal  250     ?
+T5  Darstellung PDS    1000     ?
+
+T1: Tastet den ADC ab und fügt die Werte in einen Ringpuffer mit 64 (TIME_DOMAIN_LENGTH) Elementen ein.
+T2: Simuliert die Laufzeit
+T3: Liest die Werte aus dem Ringpuffer und ruft die vorgegebene Funktion ezs_easy_pds() zur PDS-Analyse auf.
+T4: Stellt das abgetastete Signal mithilfe der vorgegebenen Funktion ezs_plot() auf dem Framebuffer dar.
+T5: Stellt die Ergebniss der PDS-Analyse durch Aufruf der ebenfalls gegebenen Funktionen ezs_plot_pds() auf dem Framebuffer dar.
+
+# Aufgabenstellung
+
+Teilaufgabe 1: Umsetzung des oben beschriebenen Systems
+
 Teilaufgabe 2) Messen Sie die Laufzeit von
 T3, T4 und T5 und nehmen Sie das Maximum als Annäherung für die WCET.
     T3: <=  11 ms
@@ -16,6 +34,7 @@ Teilaufgabe 3) Passen Sie den Phasenversatz nun so an, dass sich T1 und T2 bezie
     T2: 1
     T4: 0
     T5: 140
+    ## Implementierung der aperiodischen Steuerung
 
 
         Bezeichnung         Min. Zwischenankunftszeit[ms]   WCET[ms]
@@ -71,7 +90,7 @@ Teilaufgabe 11) Umsetzung der State-Machine
 
 Teilaufgabe 12)
 a) Welche Variante zur Überprüfung der Events muss hier verwendet werden?
- 
+
 
 b) Welche Betriebszustände können auftreten und müssen von T8 abgebildet werden?
 
