@@ -1,3 +1,11 @@
+# Allgemeine Informationen
+    Bezeichnung         Periode      WCET
+T1  Abtastung Signal    4            0,5
+T2  Flankenerkennung    4            0,5
+T3  Analyse PDS         1000         ?
+T4  Darstellung Signal  250          ?
+T5  Darstellung PDS     1000         ?
+
 ### Teilaufgabe 2: Ist ein periodisches Aufwecken der Aufgabe T2 über einen Alarm notwendig?  
     Wir geben die Daten mittels T9 sofort aus sollte im trigger_mode ein triggerereignis erkannt werden.
     Dazu muss T2 aufgeweckt werden, damit dieses erkannt werden kann. Dies kann zB mit einen arlam geschehen.
@@ -11,17 +19,20 @@
     MAILBOX(mb):
         _PRO_
         - Producer muss nicht blockieren bis ein Consumer bereit ist das event zu empfangen (falls mb nicht voll)
+        - Beliebige Datenstruktur kann mit Signal mitgeliefert werden
         _CON_
-        - groesse der mb nicht einstellbar (default: 10 slots)
+        - groesse der mb einstellbar, jedoch ALLE mbs gleich groß (Verschwendung von Speicherplatz bei mbs mit unterschiedlichen Speicheranforderungen)
         - mb voll -> Producer wird blockiert bis wieder Platz ist
+        - mb leer + cyg_mbox_get: blockierend (außer cyg_thread_release), auch möglich: cyg_mbox_timed_get()
     EVENT-FLAGS:
         _PRO_
         - 2^32 -1 Signalkombinationenn mgl.
         - warten auf mehrere ereignisse, oder eines von einer menge, oder eine Kombination von ereignissen einfach mgl.
+        - polling von event flags möglich
         _CON_
-        - zaehlen keine ereignisse -> je nach implementierung koennten Dinge verloren gehen
+        - zaehlen keine ereignisse -> je nach implementierung: Datenverlust
         - warten von threads auf bestimmte flags is blockierend *cyg_thread_wait()*
-    - Beide:
+    BEIDE:
         Unterstuetzen Produzent Konsumer Muster
 
 ### Teilaufgabe 5:
