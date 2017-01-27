@@ -1,33 +1,25 @@
-# Allgemeine Informationen
-    Bezeichnung      Periode     WCET
-T1  Abtastung Signal    4       0,5
-T2  Prokrastinator      10      1,0
-T3  Analyse PDS        1000     ?
-T4  Darstellung Signal  250     ?
-T5  Darstellung PDS    1000     ?
+### Teilaufgabe 2: Ist ein periodisches Aufwecken der Aufgabe T2 über einen Alarm notwendig?  
+    Wir geben die Daten mittels T9 sofort aus sollte im trigger_mode ein triggerereignis erkannt werden.
+    Dazu muss T2 aufgeweckt werden, damit dieses erkannt werden kann. Dies kann zB mit einen arlam geschehen.
 
-T1: Tastet den ADC ab und fügt die Werte in einen Ringpuffer mit 64 (TIME_DOMAIN_LENGTH) Elementen ein.
-T2: Simuliert die Laufzeit
-T3: Liest die Werte aus dem Ringpuffer und ruft die vorgegebene Funktion ezs_easy_pds() zur PDS-Analyse auf.
-T4: Stellt das abgetastete Signal mithilfe der vorgegebenen Funktion ezs_plot() auf dem Framebuffer dar.
-T5: Stellt die Ergebniss der PDS-Analyse durch Aufruf der ebenfalls gegebenen Funktionen ezs_plot_pds() auf dem Framebuffer dar.
+### Teilaufgabe 3: Aus den neuen Kommandos ergeben sich zusätzliche Betriebsmodi – welche?
+    StateTriggerOn      
+    StateTLevelRise     
 
-# Aufgabenstellung
-## Laufzeitmessung
+### Teilaufgabe 4: Welche Vor- beziehungsweise Nachteile sehen Sie bei den zur Verfügung stehenden Mechanismen zur Bereitstellung von Ereignissen unter eCos?
+    mailbox:
+        - groesse der mailbox nicht einstellbar???
+        - Producer muss nicht blockieren bis ein Consumer bereit ist das event zu empfangen
+        - mailbox voll -> Producer wird blockiert bis wieder Platz ist
+    Event - Flags:
+        - zaehlen keine ereignisse -> je nach implementierung koennten Dinge verloren gehen
+        - warten auf mehrere erignisse, oder eines von einer menge, oder eine Kombination von ereignissen einfach mgl.
+        - 2^32 -1 Signalkombinationenn mgl.
+    - Beide:
+        Unterstuetzen Produzent Konsumer Muster
 
-### Teilaufgabe 1: Umsetzung des oben beschriebenen Systems
+### Teilaufgabe 5: 
+    Aufgabensystem umsetzen in dem die Threads nicht von Alarmen aufgeweckt werden, sondern sich selbst geeignet aufwecken.
+    mindestens 1 Alarm noetig -> T1 
 
-### Teilaufgabe 2: Messung der Laufzeiten von T3, T4 und T5 (Maximum ~ WCET)
 
-Wann ist die Einhaltung der Deadlines unter RMA garantiert?
-
-Wäre bei EDF garantiert, dass alle Termine eingehalten werden?
-
-### Teilaufgabe 3: Anpassung der Phasen so, dass sich T1 und T2 byw. T4 und T5 nicht überlappen.
-
-## Implementierung der aperiodischen Steuerung
-
-    Bezeichnung         Min. Zwischenankunftszeit   WCET
-T6  Byteweiser Empfang              ?                 -
-T7  Dekodierung                     ?                0,5
-T8  Zustandsverwaltung              ?                 -
