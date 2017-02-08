@@ -7,17 +7,22 @@
 #include "common.h"
 
 // in milliseconds
-#define HIGH_TASK_PHASE   0
-#define MEDIUM_TASK_PHASE 0
-#define LOW_TASK_PHASE    0
+#define HIGH_TASK_PHASE   3
+#define MEDIUM_TASK_PHASE 8
+#define LOW_TASK_PHASE    1
 
-#define HIGH_TASK_PERIOD   0
-#define MEDIUM_TASK_PERIOD 0
-#define LOW_TASK_PERIOD    0
+#define HIGH_TASK_PERIOD   20
+#define MEDIUM_TASK_PERIOD 50
+#define LOW_TASK_PERIOD    200
 
-#define HIGH_TASK_PRIORITY   0
-#define MEDIUM_TASK_PRIORITY 0
-#define LOW_TASK_PRIORITY    0
+#define HIGH_TASK_PRIORITY  8
+#define MEDIUM_TASK_PRIORITY 9
+#define LOW_TASK_PRIORITY    10
+
+#define PER 0
+
+cyg_mutex_t r5;
+cyg_mutex_t r6;
 
 static cyg_uint8     high_task_stack[STACKSIZE];
 static cyg_thread    high_task_thread;
@@ -60,6 +65,12 @@ cyg_alarm s_low_task_alarm;
 
 void init_tasks(void)
 {
+    cyg_mutex_init(&r5);
+    cyg_mutex_init(&r6);
+
+    cyg_mutex_set_protocol(&r5, CYG_MUTEX_INHERIT);
+    cyg_mutex_set_protocol(&r6, CYG_MUTEX_INHERIT);
+
 	cyg_thread_create(HIGH_TASK_PRIORITY, &high_task_entry, 0, "high priority task",
 			high_task_stack, STACKSIZE,
 			&high_task_handle, &high_task_thread);
@@ -82,24 +93,37 @@ void init_tasks(void)
 static void high_task_entry(cyg_addrword_t data)
 {
 	while (1) {
+        lose_time_us(1000, PER);
+        cyg_mutex_lock(&r5);
+        lose_time_us(3000, PER);
+        cyg_mutex_lock(&r6);
+        lose_time_us(1000, PER);
+        cyg_mutex_unlock(&r6);
+        lose_time_us(1000, PER);
+        cyg_mutex_unlock(&r5);
 		cyg_thread_suspend(cyg_thread_self());
-
 	}
 }
 
 static void medium_task_entry(cyg_addrword_t data)
 {
 	while (1) {
+        lose_time_us(12000, PER);
 		cyg_thread_suspend(cyg_thread_self());
-
 	}
 }
 
 static void low_task_entry(cyg_addrword_t data)
 {
 	while (1) {
+        lose_time_us(1000, PER);
+        cyg_mutex_lock(&r6);
+        lose_time_us(4000, PER);
+        cyg_mutex_lock(&r5);
+        lose_time_us(1000, PER);
+        cyg_mutex_unlock(&r6);
+        cyg_mutex_unlock(&r5);
 		cyg_thread_suspend(cyg_thread_self());
-
 	}
 }
 

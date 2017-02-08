@@ -48,3 +48,48 @@ T10             200         1           6       (R6, 1, 5) (R5, 5, 1)
 
 ## Teilaufgabe 8:
     werden zwangslaufig auch verzoegert
+
+## Teilaufgabe 11:
+    kann max. min(Anzahl Betriebsmittel, Anzahl niederpriore Threads) mal blockiert werden
+    max. max(Haltezeit) lang
+    hier: min(3, 3) * 9 = 27
+
+## Teilaufgabe 12:
+    Verklemmungen immer nocht moeglich, weil keine der Bedingungen durch Prioritaetsvererbung ausser Kraft gesetzt
+    hier: keine Verklemmungen weil kein circular wait
+
+## Teilaufgabe 13:
+    keine Nachteile durch niederpriore threads,
+    aber: warten auf eigentlich niederpriore Threads mit erhoehten Prioritaeten
+
+## Teilaufgabe 16:
+    Summe(max.Haltezeit(Betriebsmittel, die vom hoechstprioren Thread angefordert werden))
+    Messen:
+        Messung Zeitpunkt blockade bis Zeitpunkt Wiedereinlastung
+
+## Teilaufgabe 17:
+    keine Verklemmungen, da circular wait verhindert wird
+
+## Teilaufgabe 18:
+    werden ggf. laenger von hoeherprioren Aufgaben aufgehalten, die auf Betriebsmittel warten
+    ansonsten keine direkten nachteile
+
+## Teilaufgabe 20:
+    stapelbasiert: Threads werden nur eingelastet, wenn alle benoetigte Betriebsmittel zugeteilt werden koennen
+    hier: T8 wird gar nicht erst eingelastet
+
+## Teilaufgabe 21:
+    nicht stapelbasiert: hoeherpriore Threads werden eingelastet und bei Betriebsmittelanforderung ggf blockiert
+    dynamische Prioritaeten: Obergrenzen muessen bei Prioritaetsaenderungen aktualisiert werden
+
+## Teiaufgabe 22:
+    kein circular wait
+
+## Teilaufgabe 23:
+    Wieso keine Verdraengung von T7???
+
+## Teilaufgabe 24:
+    Das tut das selbe wie in Teilaufgabe23???
+
+## Teilaufgabe 25:
+    T8 und T10 laufen jew nur einmal -> Deadlock, weil circular wait nicht verhindert

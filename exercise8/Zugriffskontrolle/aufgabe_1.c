@@ -7,18 +7,19 @@
 #include "common.h"
 
 // in milliseconds
-#define HIGH_TASK_PHASE   0
-#define MEDIUM_TASK_PHASE 0
-#define LOW_TASK_PHASE    0
+#define HIGH_TASK_PHASE   4
+#define MEDIUM_TASK_PHASE 3
+#define LOW_TASK_PHASE    1
 
-#define HIGH_TASK_PERIOD   0
-#define MEDIUM_TASK_PERIOD 0
-#define LOW_TASK_PERIOD    0
+#define HIGH_TASK_PERIOD   20
+#define MEDIUM_TASK_PERIOD 50
+#define LOW_TASK_PERIOD    200
 
-#define HIGH_TASK_PRIORITY   0
-#define MEDIUM_TASK_PRIORITY 0
-#define LOW_TASK_PRIORITY    0
+#define HIGH_TASK_PRIORITY   1
+#define MEDIUM_TASK_PRIORITY 2
+#define LOW_TASK_PRIORITY    3
 
+#define PERCENTAGE 100
 
 static cyg_uint8     high_task_stack[STACKSIZE];
 static cyg_thread    high_task_thread;
@@ -36,6 +37,13 @@ cyg_handle_t  low_task_handle;
 static void high_task_entry(cyg_addrword_t data);
 static void medium_task_entry(cyg_addrword_t data);
 static void low_task_entry(cyg_addrword_t data);
+
+static void alloc_r1(cyg_uint32 time)
+{
+    cyg_scheduler_lock();
+    lose_time_us(time, PERCENTAGE);
+    cyg_scheduler_unlock();
+}
 
 static void high_task_alarmfn(cyg_handle_t alarmH, cyg_addrword_t data)
 {
@@ -82,24 +90,28 @@ void init_tasks(void)
 static void high_task_entry(cyg_addrword_t data)
 {
 	while (1) {
+        lose_time_us(3000, PERCENTAGE);
+        alloc_r1(1000);
+        lose_time_us(2000, PERCENTAGE);
 		cyg_thread_suspend(cyg_thread_self());
-
 	}
 }
 
 static void medium_task_entry(cyg_addrword_t data)
 {
 	while (1) {
+        lose_time_us(4000, PERCENTAGE);
 		cyg_thread_suspend(cyg_thread_self());
-
 	}
 }
 
 static void low_task_entry(cyg_addrword_t data)
 {
 	while (1) {
+        lose_time_us(1000, PERCENTAGE);
+        alloc_r1(7000);
+        lose_time_us(1000, PERCENTAGE);
 		cyg_thread_suspend(cyg_thread_self());
-
 	}
 }
 
