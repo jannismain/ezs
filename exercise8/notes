@@ -26,3 +26,25 @@ T10             200         1           6       (R6, 1, 5) (R5, 5, 1)
 
 ### Teilaufgabe 1:
 *Welche Bedingungen müssen erfüllt sein, damit es zu einer Verklemmung (engl. Deadlock) kommen kann?*
+    - keine preemption
+    - hold and wait
+    - mutual exclusion
+    - circular wait
+
+### Teilaufgabe 2:
+    Blockierzeit, die Zeit, die auf das Betriebsmittel gewartet wird
+
+## Teilaufgabe 3:
+    Blockierungszeit <= Summe(wcets aller niedrigerprioren Auftraege)
+
+## Teilaufgabe 4:
+    abhaengig von Strategie zur Zugriffskontrolle, werden ggf. blockiert oder auch nicht
+
+## Teilaufgabe 6:
+    max. Blockierungszeit: 7ms
+
+## Teilaufgabe 7:
+    nein, weil kein hold and wait
+
+## Teilaufgabe 8:
+    werden zwangslaufig auch verzoegert
