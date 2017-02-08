@@ -1,22 +1,28 @@
-#Exercise 8
+# Exercise 8
 
-##Angaben
+## Angaben
 
-###Aufgabensystem 1
+### Aufgabensystem 1
 Aufgabe     Periode[ms]  Phase[ms]   WCET[ms]   Betriebsmittel¹
 T1              20          4           6       (R1, 3, 1)
 T2              50          3           4
 T3              200         1           9       (R1, 1, 7)
 
-###Aufgabensystem 2
+### Aufgabensystem 2
 Aufgabe     Periode[ms]  Phase[ms]   WCET[ms]   Betriebsmittel¹
 T4              20          7           2       (R2, 1, 1)
 T5              50          5           6       (R2, 1, 5) (R3, 3, 2)
 T6              100         3           6       (R3, 1, 5) (R4, 4, 2)
 T7              200         1           10      (R4, 1, 9)
 
-###Aufgabensystem 3
+### Aufgabensystem 3
 Aufgabe     Periode[ms]  Phase[ms]   WCET[ms]   Betriebsmittel¹
 T8              20          3           6       (R5, 1, 5) (R6, 4, 1)
 T9              50          8           12
 T10             200         1           6       (R6, 1, 5) (R5, 5, 1)
+
+---
+## Bearbeitung
+
+### Teilaufgabe 1:
+*Welche Bedingungen müssen erfüllt sein, damit es zu einer Verklemmung (engl. Deadlock) kommen kann?*
