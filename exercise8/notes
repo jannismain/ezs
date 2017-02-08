@@ -26,3 +26,57 @@ T10             200         1           6       (R6, 1, 5) (R5, 5, 1)
 
 ### Teilaufgabe 1:
 *Welche Bedingungen müssen erfüllt sein, damit es zu einer Verklemmung (engl. Deadlock) kommen kann?*
+
+
+### Teilaufgabe 2:
+*Welcher zusätzliche Parameter muss bei der Laufzeitanalyse einer Aufgabe mit gegenseitigem Ausschluss beachtet werden?*
+
+### Teilaufgabe 3:
+*WiewirktsichdieserParameteraufdieLaufzeitanalysevonniederprioren/höherprioren Aufgaben im Allgemeinen aus, welche selbst eine Abhängigkeit zu dem kritischen Abschnitt aufweisen?*
+
+### Teilaufgabe 4:
+*Wie sieht dies bei niederprioren/höherprioren Aufgaben im Allgemeinen aus, die selbst in keiner Abhängigkeit zu dem kritischen Abschnitt stehen?*
+
+### Teilaufgabe 5:
+*Zeichnen Sie den entstehenden Ablaufplan.*
+
+### Teilaufgabe 6:
+*Welche maximale Blockadezeit (für die höchstpriore Aufgabe) erwarten Sie?*
+
+### Teilaufgabe 7:
+*Können Verklemmungen auftreten?*
+
+    Nein, Hold-and-Wait Bedingung nicht erfuellt!
+
+### Teilaufgabe 8:
+*Welche Nachteile erfahren unbeteiligte Aufgaben (die kein Betriebsmittel nutzen)?*
+
+    Werden blockiert, obwohl diese höhere Priorität besitzen!
+
+### Teilaufgabe 9:
+*Messen Sie die Blockadezeit der höchstprioren Aufgabe ☞ ...unlock() und archivieren Sie einen Screenshot Ihres der zeitlichen Abfolge für die Abgabe.*
+
+### Teilaufgabe 10:
+
+### Teilaufgabe 11:
+*Welche maximale Blockadezeit (für die höchstpriore Aufgabe) erwarten Sie?*
+
+*aus Vorlesung:*
+
+---
+Blockierungszeit ist maximal b = min (n, k) · max (cs)
+n = Anzahl der Betriebsmittel
+k = niederpriorisierte Aufgaben in Konflikt
+cs = kritische Abschnitte von Aufträgen niedrigerer Priorität
+--> Pessimistisch: Kritische Abschnitte sind unterschiedlich lang
+
+---
+
+### Teilaufgabe 12:
+*Können Verklemmungen auftreten?*
+
+### Teilaufgabe 13:
+
+### Teilaufgabe 14:
+
+### Teilaufgabe 15:
