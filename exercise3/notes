@@ -1,0 +1,121 @@
+Teilaufgabe 1+2)
+Faktoren Ausfuehrungszeit:
+    - checksum: Arraylaenge
+    - bubblesort: Arraylaenge, grad der sotierung
+
+
+Teilaufgabe 3) gewaehlte Eingaben fuehren nicht umbedingt zum laengsten Pfad
+
+Teilaufgabe 4)
+    Messung misst in ms
+    ist die Messung gueltig?
+
+teilaufgabe 5)
+    - 512 unsorted:
+        - mean: 2166.97
+        - standart deviation   189.92729553216
+        - standart error 18,927 
+        - Varianz  35824.251
+        - max  2715
+        - min 1731   
+    - 512 sorted:
+        2756 us
+    -512 checksum
+         523798 ps
+Teilaufgabe 6)
+    - maximum < wcet -> wcet muss groesser als das maximum abgeschaetzt werden
+    - minimum > bcet -> aber die ist eher irrelevant
+    - Standartabweichung & fehler, mittelwert: wenn abweichung klein ist wird abschaetzung besser
+   
+Teilfaufgabe 7) 
+    siehe code
+    - messe Intervalle auf oszi aus
+
+Teialaufgabe 8)
+    Werte: array size 512, sorted
+        16.4 ms
+        16.0 ms
+        16.4 ms
+        16.0 ms
+        16.0 ms
+        16.4 ms
+        16.0 ms
+        16.4 ms
+        16.0 ms
+        16.0 ms
+        16.0 ms
+
+Teilaufgabe 9)
+    immens hoehere Varianz bei Stopuhr werten
+
+Teilaufgabe 10)
+    ca 4
+
+Teilaufgabe 11)
+    Vorteile oszi:
+        ungenauigkeit des internen Timers kann umgangen werden
+    Nachteile oszi:
+        hoeherer Aufwand, nicht automatisierbar
+--> kein oszi
+
+Teilaufgabe 12)
+    es ist nicht garantiert das unter den Messungen der tatsaechliche WC eintrifft
+    -> Ergebnisse haengen von eingabedaten, dem systeminteren zustand und den planeten konstellationen ab 
+    --> testumgebung kann den WC nicht zuverlaessig erzeugen
+
+Teilaufgabe 13)
+    bubblesort_job
+        - wcet schaetzung 1.242 s
+        - schleifen analyse ???
+    bubblesort
+        - wcet schaetzung 81.06 us
+        - loop bound wird auf 4 geschaetzt
+    -> realistische Analyse:
+        - weder noch
+
+Teilaufgabe 14)
+    eine loop bound von 4 ist nicht sinnig
+
+Teilaufgabe 15)
+    - anotation loop bound auf 512 gesetzt
+    - wcet bubblesort: 1.249 s
+    - wcet bubblesort_job unveraendert und kleiner wcet bubblesort!
+Teilaufgabe 16)
+    Time triggerd systems, bei event triggerd systems koenen interrupts auftretten sie statisch nur schwer vorhersagbar sind. 
+    Time triggers systems haben fuer gewoehnlich nur einen Timer interrupt, dieser ist besser vorhersagbar
+
+Teilaufgabe 17)
+    in einen falsch rum sotierten moeglichst grossen Array
+
+Teilaufgabe 18)
+    seltsame static Variablen(-> ggf fuer aiT nicht erkennbar ob anderweitig noch Zugriffe stattfinden koennten)
+
+Teilaufgabe 19)
+    eCos ist Event triggerd -> Siehe aufgabe 16
+    Ansaetze:
+        - anderes eCos verwenden
+        - messungen
+
+Teilaufgabe 20)
+    2 Warnings wegen fehlender maximalen Schleifendurchlaeufen
+    L1: outer Loop
+        laeuft bis return in else-Teil des else-Blocks am Anfang
+        Bedingung: second stage (extracting elements) erreicht und n == 0
+            - Durchlaeufe bis second stage: Bedingung dafuer: parent <= 0
+                - parent: initial N/2, wird in first stage um jew 1 dekrementiert
+                -> max N/2 Durchlaufe bevor second stage
+            - second stage: return bei n == 0
+                - n initial N, in jedem Durchlauf in second stage dekrementiert
+                -> max N Durchlaeufe von second stage bis Ende
+                   +1 fuer unvollstaendigen letzten Durchlauf
+        -> N/2 + N + 1 Durchlaeufe maximal
+    L2: inner Loop
+        laeuft bis (child >= n)
+        n maximal N
+        child = index * 2 + 1 = parent * 2 + 1 >= 0 * 2 + 1 >= 1
+        falls kein break: child = index * 2 + 1 = child * 2 + 1
+        Abschaetzung: max ceil(ld(N)) Durchlaeufe
+    Fuer N = 512:
+        - L1: N/2 + N + 1 = 767
+        - L2: ceil(ld(512)) = 8
+    Ergebnis: 21.729ms

@@ -1,0 +1,50 @@
+Teilaufgabe 2) Was beobachten Sie?
+    - T2 und T3 haben die selbe periode und eine Prioritaet  die um 1 varierit
+    - die startintervalle zwischen den startzeitpunkten sind unkonstant
+    - wird unmittelbar nach beenden des vorherigen task ausgefuehrt
+
+Teilaufgabe 3) Welchen Effekt hätte dieses Systemverhalten auf die Abtastung von Signal 2?
+    - Die Abtastung wuerde in unregelmaessigen Abstaenden erfolgen, da die Laufzeit von T1 variiert.
+    - Eine derartige Abtastung ist nicht optimal
+
+Teilaufgabe 4)
+    - Vorgehen: Ablaufplan nach "cycling executive" Prinzip wurde entwickelt
+    - Noetiges Vorwissen: WCET + Periode der Tasks, Hyperperiode
+    - Beobachtungen: 
+        - T4 wird nicht mehr unterbrochen
+        - idlethread hat anderes verhalten -> laueft zwischen T2 und T3
+        - Tasks laufen nun zu periodisch (zu festgelegten Zeitpunkten) 
+
+Teilaufgabe 5)
+    - idletask hat angepasste prioritaet
+    - zeitdifferenz zwischen dem beenden des alten und starten des neuen tasks
+    - tasks unterbrechen sich nicht gegenseitig
+    - immer wenn kein anderes task laeuft, laeuft der mit hoechster prioritaet(T1)
+
+Teilaufgabe 6) Welche Vor- beziehungsweise Nachteile sehen sie gegenüber der ereignisgesteuerten
+Lösung?
+    tt_Ecos:
+        + weniger boilerplate
+        +- moeglichkeit deadlines zu ueberpruefen (bzw. halt zu muessen)
+        + validitaetspruefung der tabelle 
+        - ablaufplannung muss "per hand" gemacht werden. und korrekt sein
+        - gesamte Hyperperiode muss geplant werden.
+
+Teilaufgabe 7) Welches Ausführungsmodell kommt in tt-eCos zum Einsatz? Welches in eCos? Welche Konsequenzen hat dies? Sprich: Wie müssen Sie Aktivitäten in eCos bzw. tt-eCos umsetzen? (Frage zielt auf Prozessorientierung vs. Auftragsorientierung ab!)
+    - eCos 
+       - Prozessorientiertes Ausfuehrungsmodell
+       - ist ereignisgesteurt
+       - ein thread je task mit angepasster prioriaet die sich hier aus RM ergibt
+       - online geschedult
+       - periodische ausfuehrung durch passendes resumen und suspenden eines threades und ein arlam je task
+
+    - tt_eCos
+        - Auftragsorientiertes Ausfuehrungsmodell
+        - zeitgesteuert
+        - ein task wird initialisiert und in dispatcher table eingetragen
+        - offline scheduling 
+        - planung der gesammten hyperperiode -> periodische ausfuehrung der Tasks
+
+Teilaufgabe 8) Wie könnte man die ereignisgesteuerte Variante von eCos diesbezüglich benutzerfreundlicher gestalten?
+    - ggf. nicht gesammte hyperpeiode plannen muessen, beim einplannen noch periodizitaet angegbar o.ae. // glaube das trifft auf tt_ecos zu, jedoch nicht auf ecos
+    - Reduzierung des boilerplate codes (evtl. durch wegabstrahierte threaderstellung, implementierung von tasks in threads in form einer tabelle, wie tt_ecos)
