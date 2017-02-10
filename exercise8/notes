@@ -26,8 +26,6 @@ T10             200         1           6       (R6, 1, 5) (R5, 5, 1)
 
 ### Teilaufgabe 1:
 *Welche Bedingungen müssen erfüllt sein, damit es zu einer Verklemmung (engl. Deadlock) kommen kann?*
-<<<<<<< HEAD
-
 
 ### Teilaufgabe 2:
 *Welcher zusätzliche Parameter muss bei der Laufzeitanalyse einer Aufgabe mit gegenseitigem Ausschluss beachtet werden?*
