@@ -1,0 +1,38 @@
+<!DOCTYPE APX>
+<project xmlns="http://www.absint.com/apx" version="16.10" target="arm" build="269677">
+ <options xmlns="http://www.absint.com/apx">
+  <arm_options xmlns="http://www.absint.com/apx">
+   <general xmlns="http://www.absint.com/apx">
+    <target xmlns="http://www.absint.com/apx">Cortex-M4</target>
+   </general>
+   <machine_settings_file xmlns="http://www.absint.com/apx" hash="5c5b4f188a066721e6ff110936b2b027">TC1796.msf</machine_settings_file>
+   <instruction_set xmlns="http://www.absint.com/apx">THUMB</instruction_set>
+  </arm_options>
+  <analyses_options xmlns="http://www.absint.com/apx">
+   <extract_annotations_from_source_files xmlns="http://www.absint.com/apx">true</extract_annotations_from_source_files>
+   <use_only_safe_patterns xmlns="http://www.absint.com/apx">true</use_only_safe_patterns>
+  </analyses_options>
+  <visualization_options xmlns="http://www.absint.com/apx">
+   <boxed_blocks xmlns="http://www.absint.com/apx">true</boxed_blocks>
+   <boxed_routines xmlns="http://www.absint.com/apx">true</boxed_routines>
+   <inline_loops xmlns="http://www.absint.com/apx">true</inline_loops>
+   <normal_layout xmlns="http://www.absint.com/apx">false</normal_layout>
+   <trace_like_pipeline_state_visualization xmlns="http://www.absint.com/apx">true</trace_like_pipeline_state_visualization>
+  </visualization_options>
+ </options>
+ <files xmlns="http://www.absint.com/apx">
+  <executables xmlns="http://www.absint.com/apx" hash="aaff004674bc345be51a95b9aeceb38c">build/app.elf</executables>
+  <ais xmlns="http://www.absint.com/apx" hash="">app.ais</ais>
+ </files>
+ <analyses xmlns="http://www.absint.com/apx">
+  <analysis xmlns="http://www.absint.com/apx" id="bubblesort_job" enabled="true" type="wcet_analysis">
+   <analysis_start xmlns="http://www.absint.com/apx">bubblesort_job</analysis_start>
+  </analysis>
+  <analysis xmlns="http://www.absint.com/apx" id="checksum_job" enabled="false" type="wcet_analysis">
+   <analysis_start xmlns="http://www.absint.com/apx">checksum_job</analysis_start>
+  </analysis>
+  <analysis id="bubblesort" enabled="true" type="wcet_analysis">
+   <analysis_start>bubblesort</analysis_start>
+  </analysis>
+ </analyses>
+</project>
